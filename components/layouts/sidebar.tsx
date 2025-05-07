@@ -1,0 +1,115 @@
+"use client"
+
+import { usePathname } from "next/navigation"
+import Link from "next/link"
+import { LayoutDashboard, CheckSquare, Settings, MessageSquare, StickyNote, X, Moon, Sun } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useTheme } from "next-themes"
+import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
+
+interface SidebarProps {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}
+
+export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
+  const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  // Ensure the component is mounted before rendering theme-dependent content
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const routes = [
+    {
+      name: "Dashboard",
+      path: "/",
+      icon: LayoutDashboard,
+    },
+    {
+      name: "Tasks",
+      path: "/tasks",
+      icon: CheckSquare,
+    },
+    {
+      name: "Notes",
+      path: "/notes",
+      icon: StickyNote,
+    },
+    {
+      name: "Settings",
+      path: "/settings",
+      icon: Settings,
+    },
+    {
+      name: "Feedback",
+      path: "/feedback",
+      icon: MessageSquare,
+    },
+  ]
+
+  return (
+    <>
+      {/* Overlay for mobile */}
+      {isOpen && <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={() => setIsOpen(false)} />}
+
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 w-64 transform bg-card p-4 shadow-lg transition-transform duration-200 ease-in-out md:relative md:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold text-primary">TaskMaster</h1>
+          <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="md:hidden">
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <nav className="mt-8 space-y-1">
+          {routes.map((route) => (
+            <Link
+              key={route.path}
+              href={route.path}
+              className={cn(
+                "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                pathname === route.path
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              <route.icon className="mr-3 h-5 w-5" />
+              {route.name}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="absolute bottom-4 left-4 right-4">
+          {mounted && (
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <>
+                  <Sun className="mr-2 h-4 w-4" />
+                  Light Mode
+                </>
+              ) : (
+                <>
+                  <Moon className="mr-2 h-4 w-4" />
+                  Dark Mode
+                </>
+              )}
+            </Button>
+          )}
+        </div>
+      </aside>
+    </>
+  )
+}
