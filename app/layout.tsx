@@ -10,7 +10,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "TaskMaster - Task Management Application",
   description: "A powerful yet simple task management application",
-  generator: "v0.dev",
 };
 
 export default function RootLayout({

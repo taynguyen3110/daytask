@@ -2,7 +2,7 @@
 
 import { create } from "zustand"
 import type { Note } from "@/lib/types"
-import { generateId, getLocalStorageItem, setLocalStorageItem } from "@/lib/utils"
+import api from "@/lib/api"
 
 interface NoteStore {
   notes: Note[]
@@ -10,52 +10,6 @@ interface NoteStore {
   createNote: (note: Partial<Note>) => Promise<Note>
   updateNote: (note: Note) => Promise<Note>
   deleteNote: (id: string) => Promise<void>
-}
-
-// Mock API functions
-const api = {
-  fetchNotes: async (): Promise<Note[]> => {
-    // In a real app, this would be an API call
-    return getLocalStorageItem<Note[]>("notes", [])
-  },
-
-  createNote: async (note: Partial<Note>): Promise<Note> => {
-    // In a real app, this would be an API call
-    const notes = getLocalStorageItem<Note[]>("notes", [])
-    const newNote: Note = {
-      id: generateId(),
-      content: note.content || "",
-      createdAt: note.createdAt || new Date().toISOString(),
-      updatedAt: note.updatedAt || new Date().toISOString(),
-    }
-
-    notes.push(newNote)
-    setLocalStorageItem("notes", notes)
-    return newNote
-  },
-
-  updateNote: async (note: Note): Promise<Note> => {
-    // In a real app, this would be an API call
-    const notes = getLocalStorageItem<Note[]>("notes", [])
-    const index = notes.findIndex((n) => n.id === note.id)
-
-    if (index !== -1) {
-      notes[index] = {
-        ...note,
-        updatedAt: new Date().toISOString(),
-      }
-      setLocalStorageItem("notes", notes)
-    }
-
-    return note
-  },
-
-  deleteNote: async (id: string): Promise<void> => {
-    // In a real app, this would be an API call
-    const notes = getLocalStorageItem<Note[]>("notes", [])
-    const filteredNotes = notes.filter((note) => note.id !== id)
-    setLocalStorageItem("notes", filteredNotes)
-  },
 }
 
 export const useNoteStore = create<NoteStore>((set, get) => ({

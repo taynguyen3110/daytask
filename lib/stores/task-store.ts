@@ -2,13 +2,8 @@
 
 import { create } from "zustand";
 import type { Task } from "@/lib/types";
-import {
-  generateId,
-  getLocalStorageItem,
-  setLocalStorageItem,
-} from "@/lib/utils";
 import { useNotifications } from "@/lib/hooks/use-notifications";
-import { tasks } from "@/app/api/tasks/route";
+import api from "@/lib/api"
 
 interface TaskStore {
   tasks: Task[];
@@ -20,60 +15,6 @@ interface TaskStore {
   syncTasks: () => Promise<void>;
 }
 
-// Mock API functions
-const api = {
-  fetchTasks: async (): Promise<Task[]> => {
-    // In a real app, this would be an API call
-    // return getLocalStorageItem<Task[]>("tasks", [])
-    return tasks;
-  },
-
-  createTask: async (task: Partial<Task>): Promise<Task> => {
-    // In a real app, this would be an API call
-    const tasks = getLocalStorageItem<Task[]>("tasks", []);
-    const newTask: Task = {
-      id: generateId(),
-      title: task.title || "",
-      description: task.description,
-      completed: false,
-      dueDate: task.dueDate,
-      priority: task.priority || "medium",
-      labels: task.labels,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      recurrence: task.recurrence,
-      reminder: task.reminder,
-      snoozedUntil: task.snoozedUntil,
-    };
-
-    tasks.push(newTask);
-    setLocalStorageItem("tasks", tasks);
-    return newTask;
-  },
-
-  updateTask: async (task: Task): Promise<Task> => {
-    // In a real app, this would be an API call
-    const tasks = getLocalStorageItem<Task[]>("tasks", []);
-    const index = tasks.findIndex((t) => t.id === task.id);
-
-    if (index !== -1) {
-      tasks[index] = {
-        ...task,
-        updatedAt: new Date().toISOString(),
-      };
-      setLocalStorageItem("tasks", tasks);
-    }
-
-    return task;
-  },
-
-  deleteTask: async (id: string): Promise<void> => {
-    // In a real app, this would be an API call
-    const tasks = getLocalStorageItem<Task[]>("tasks", []);
-    const filteredTasks = tasks.filter((task) => task.id !== id);
-    setLocalStorageItem("tasks", filteredTasks);
-  },
-};
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
   tasks: [],

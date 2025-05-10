@@ -40,3 +40,14 @@ export interface Settings {
   autoSuggestDueDates: boolean
   showConfetti: boolean
 }
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  token: string | null;
+}
