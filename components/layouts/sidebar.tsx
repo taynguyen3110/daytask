@@ -1,12 +1,14 @@
 "use client"
 
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
-import { LayoutDashboard, CheckSquare, Settings, MessageSquare, StickyNote, X, Moon, Sun } from "lucide-react"
+import { LayoutDashboard, CheckSquare, Settings, MessageSquare, StickyNote, X, Moon, Sun, LogIn, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
+import { useAuthStore } from "@/lib/stores/auth-store" // Zustand store for auth state
+import { toast } from "../ui/use-toast"
 
 interface SidebarProps {
   isOpen: boolean
@@ -15,8 +17,10 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const { isAuthenticated, logout } = useAuthStore() // Zustand store for user state and logout function
 
   // Ensure the component is mounted before rendering theme-dependent content
   useEffect(() => {
@@ -51,6 +55,20 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     },
   ]
 
+  const handleLogout = async () => {
+    try {
+      await logout()
+      toast({
+        title: "You are now logged out.",
+        duration: 2000,
+        variant: "destructive",
+      })
+      router.push("/")
+    } catch (error) {
+      console.error("Logout failed:", error)
+    }
+  }
+
   return (
     <>
       {/* Overlay for mobile */}
@@ -64,7 +82,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         )}
       >
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-primary">TaskMaster</h1>
+          <h1 className="text-xl font-bold text-primary">DayTask</h1>
           <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="md:hidden">
             <X className="h-5 w-5" />
           </Button>
@@ -88,7 +106,28 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           ))}
         </nav>
 
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="absolute bottom-4 left-4 right-4 space-y-2">
+          
+          {isAuthenticated ? (
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={handleLogout}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => router.push("/login")}
+            >
+              <LogIn className="mr-2 h-4 w-4" />
+              Login
+            </Button>
+          )}
+
           {mounted && (
             <Button
               variant="outline"
@@ -108,6 +147,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
               )}
             </Button>
           )}
+
         </div>
       </aside>
     </>

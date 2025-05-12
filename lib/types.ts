@@ -1,44 +1,44 @@
 export interface Task {
-  id: string
-  title: string
-  description?: string
-  completed: boolean
-  dueDate?: string
-  priority?: string
-  labels?: string[]
-  createdAt: string
-  updatedAt: string
-  completedAt?: string
-  recurrence?: string
-  reminder?: string
-  snoozedUntil?: string
+  id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
+  dueDate?: string;
+  priority?: string;
+  labels?: string[];
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string;
+  recurrence?: string;
+  reminder?: string;
+  snoozedUntil?: string;
 }
 
 export interface Note {
-  id: string
-  content: string
-  createdAt: string
-  updatedAt: string
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Notification {
-  id: string
-  title: string
-  message: string
-  read: boolean
-  createdAt: string
-  taskId?: string
+  id: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+  taskId?: string;
 }
 
 export interface Settings {
-  theme: string
-  enableOfflineMode: boolean
-  enableBrowserNotifications: boolean
-  enableTelegramNotifications: boolean
-  telegramToken?: string
-  telegramChatId?: string
-  autoSuggestDueDates: boolean
-  showConfetti: boolean
+  theme: string;
+  enableOfflineMode: boolean;
+  enableBrowserNotifications: boolean;
+  enableTelegramNotifications: boolean;
+  telegramToken?: string;
+  telegramChatId?: string;
+  autoSuggestDueDates: boolean;
+  showConfetti: boolean;
 }
 
 export interface User {
@@ -49,5 +49,6 @@ export interface User {
 
 export interface AuthState {
   isAuthenticated: boolean;
-  token: string | null;
+  token: { accessToken: string; refreshToken: string } | null;
+  user: User | null;
 }

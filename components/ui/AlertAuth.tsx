@@ -69,7 +69,7 @@ const Alert: React.FC<AlertProps> = ({
             <button
               type="button"
               className={clsx(
-                'inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2',
+                'inline-flex rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2',
                 text,
                 'hover:bg-white dark:hover:bg-gray-800'
               )}

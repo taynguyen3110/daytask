@@ -59,7 +59,7 @@ export function FeedbackForm() {
         <CardHeader>
           <CardTitle>Send Feedback</CardTitle>
           <CardDescription>
-            We'd love to hear your thoughts on TaskMaster. Your feedback helps us improve!
+            We'd love to hear your thoughts on DayTask. Your feedback helps us improve!
           </CardDescription>
         </CardHeader>
         <CardContent>

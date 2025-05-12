@@ -58,7 +58,7 @@ export function Settings() {
           <Card>
             <CardHeader>
               <CardTitle>Appearance</CardTitle>
-              <CardDescription>Customize how TaskMaster looks and feels</CardDescription>
+              <CardDescription>Customize how DayTask looks and feels</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">

@@ -18,7 +18,7 @@ export function MobileHeader({ onMenuClick }: MobileHeaderProps) {
       <Button variant="ghost" size="icon" onClick={onMenuClick}>
         <Menu className="h-5 w-5" />
       </Button>
-      <h1 className="ml-4 text-lg font-semibold">TaskMaster</h1>
+      <h1 className="ml-4 text-lg font-semibold">DayTask</h1>
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

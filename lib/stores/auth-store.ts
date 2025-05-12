@@ -1,51 +1,61 @@
-import { create } from 'zustand';
-import { AuthState } from '../types';
-import authService from '../api/authService';
+import { create } from "zustand";
+import { AuthState } from "../types";
+import authService, { RegisterResponse } from "../api/authService";
 
 interface AuthStore extends AuthState {
   login: (email: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string, confirmPassword: string) => Promise<void>;
+  register: (
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => Promise<void>;
   logout: () => void;
   initialize: () => Promise<void>;
+  message: string;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   user: null,
   token: null,
-  
+  message: "",
+
   login: async (email, password) => {
     try {
       const authState = await authService.login({ email, password });
       set(authState);
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       throw error;
     }
   },
-  
+
   register: async (username, email, password, confirmPassword) => {
-    try {
-      await authService.register({ username, email, password, confirmPassword });
-    } catch (error) {
-      console.error('Registration failed:', error);
-      throw error;
+    const response = await authService.register({
+      username,
+      email,
+      password,
+      confirmPassword,
+    });
+    if (response.success) {
+      set({ message: response.message });
     }
   },
-  
+
   logout: () => {
     authService.logout();
-    set({ isAuthenticated: false, token: null });
+    set({ isAuthenticated: false, token: null, user: null });
   },
-  
+
   initialize: async () => {
-    const { isAuthenticated, token } = authService.checkAuth();
-    if (isAuthenticated && token) {
+    const { isAuthenticated, token, user } = authService.checkAuth();
+    if (isAuthenticated && token && user) {
       try {
-        set({ isAuthenticated: true, token });
+        set({ isAuthenticated: true, token, user });
       } catch (error) {
         authService.logout();
-        set({ isAuthenticated: false, token: null });
+        set({ isAuthenticated: false, token: null, user: null });
       }
     }
   },

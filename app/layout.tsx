@@ -8,7 +8,7 @@ import { Analytics } from "@vercel/analytics/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "TaskMaster - Task Management Application",
+  title: "DayTask",
   description: "A powerful yet simple task management application",
 };
 
@@ -26,9 +26,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+           <div>
+            <p>test toast</p>
+            <Toaster />
+          </div>
           {children}
           <Analytics />
-          <Toaster />
+         
         </ThemeProvider>
       </body>
     </html>

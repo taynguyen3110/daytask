@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { LogIn } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import Button from '@/components/ui/ButtonAuth';
-import Alert from '@/components/ui/AlertAuth';
-import { useAuthStore } from '@/lib/stores/auth-store';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { LogIn } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import Button from "@/components/ui/ButtonAuth";
+import Alert from "@/components/ui/AlertAuth";
+import { useAuthStore } from "@/lib/stores/auth-store";
+import { toast } from "@/components/ui/use-toast";
 
 interface LoginFormData {
   email: string;
@@ -27,21 +28,19 @@ const LoginForm: React.FC = () => {
     formState: { errors },
   } = useForm<LoginFormData>();
 
-
-
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     setError(null);
 
     try {
       await login(data.email, data.password);
-      router.push('/tasks');
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : 'Login failed. Please check your credentials and try again.';
-      setError(errorMessage);
+      toast({
+        title: "You are now logged in.",
+        duration: 2000,
+      });
+      router.push("/");
+    } catch (err: any) {
+      setError(err.response?.data?.message);
     } finally {
       setIsLoading(false);
     }
@@ -50,14 +49,20 @@ const LoginForm: React.FC = () => {
   return (
     <div className="w-full max-w-md px-8 py-10 bg-white dark:bg-gray-800 shadow-md rounded-lg">
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Log in to your account</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Log in to your account
+        </h1>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
           Enter your credentials to access your tasks
         </p>
       </div>
 
       {successMessage && (
-        <Alert variant="success" className="mb-6" onClose={() => setSuccessMessage(null)}>
+        <Alert
+          variant="success"
+          className="mb-6"
+          onClose={() => setSuccessMessage(null)}
+        >
           {successMessage}
         </Alert>
       )}
@@ -77,11 +82,11 @@ const LoginForm: React.FC = () => {
             type="email"
             autoComplete="email"
             placeholder="Enter your email"
-            {...register('email', {
-              required: 'Email is required',
+            {...register("email", {
+              required: "Email is required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'Invalid email address',
+                message: "Invalid email address",
               },
             })}
           />
@@ -100,11 +105,11 @@ const LoginForm: React.FC = () => {
             type="password"
             autoComplete="current-password"
             placeholder="Enter your password"
-            {...register('password', {
-              required: 'Password is required',
+            {...register("password", {
+              required: "Password is required",
               minLength: {
                 value: 6,
-                message: 'Password must be at least 6 characters',
+                message: "Password must be at least 6 characters",
               },
             })}
           />
@@ -115,7 +120,7 @@ const LoginForm: React.FC = () => {
           )}
         </div>
 
-         {/* <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <div className="text-sm">
             <Link
               to="/forgot-password"
@@ -139,7 +144,7 @@ const LoginForm: React.FC = () => {
 
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Don't have an account?{' '}
+          Don't have an account?{" "}
           <a
             href="/register"
             className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"

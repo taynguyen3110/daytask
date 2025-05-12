@@ -38,10 +38,10 @@ const RegisterForm: React.FC = () => {
 
     try {
       await register(data.username, data.email, data.password, data.confirmPassword);
-      router.push('/login?successMessage=Account%20created%20successfully!');
+      router.push('/login');
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : 'Registration failed. Please try again.';
+        (err as any)?.response?.data?.message || 'Registration failed. Please try again.';
       setError(errorMessage);
     } finally {
       setIsLoading(false);
