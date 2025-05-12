@@ -59,7 +59,8 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     try {
       await logout()
       toast({
-        title: "You are now logged out.",
+        title: "You are now logged out!",
+        description: "Login to sync your tasks to your account.",
         duration: 2000,
         variant: "destructive",
       })

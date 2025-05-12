@@ -36,6 +36,7 @@ const LoginForm: React.FC = () => {
       await login(data.email, data.password);
       toast({
         title: "You are now logged in.",
+        variant: "success",
         duration: 2000,
       });
       router.push("/");
