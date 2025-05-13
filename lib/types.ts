@@ -12,6 +12,7 @@ export interface Task {
   recurrence?: string;
   reminder?: string;
   snoozedUntil?: string;
+  userId?: string;
 }
 
 export interface Note {

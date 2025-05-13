@@ -35,7 +35,7 @@ export function TaskList() {
   const [filterLabel, setFilterLabel] = useState<string | null>(null)
 
   // Get unique labels from all tasks
-  const allLabels = Array.from(new Set(tasks.flatMap((task) => task.labels || [])))
+  const allLabels = tasks.length > 0 ? Array.from(new Set(tasks.flatMap((task) => task.labels || []))) : [];
 
   // Handle date from URL query params
   useEffect(() => {

@@ -1,68 +1,78 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { MoreHorizontal, Calendar, Bell, Repeat, Tag, AlarmClock } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import {
+  MoreHorizontal,
+  Calendar,
+  Bell,
+  Repeat,
+  Tag,
+  AlarmClock,
+} from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { TaskDialog } from "@/components/tasks/task-dialog"
-import { SnoozeDialog } from "@/components/tasks/snooze-dialog"
-import { ConfirmDialog } from "@/components/ui/confirm-dialog"
-import { useTaskStore } from "@/lib/stores/task-store"
-import type { Task } from "@/lib/types"
-import { formatDistanceToNow, isPast, isToday } from "date-fns"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/dropdown-menu";
+import { TaskDialog } from "@/components/tasks/task-dialog";
+import { SnoozeDialog } from "@/components/tasks/snooze-dialog";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { useTaskStore } from "@/lib/stores/task-store";
+import type { Task } from "@/lib/types";
+import { formatDistanceToNow, isPast, isToday } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface TaskItemProps {
-  task: Task
+  task: Task;
 }
 
 export const getRecurrenceBadge = (task: Task) => {
-  if (!task.recurrence) return null
+  if (!task.recurrence) return null;
 
-  let text = ""
+  let text = "";
   switch (task.recurrence) {
     case "daily":
-      text = "Daily"
-      break
+      text = "Daily";
+      break;
     case "weekly":
-      text = "Weekly"
-      break
+      text = "Weekly";
+      break;
     case "monthly":
-      text = "Monthly"
-      break
+      text = "Monthly";
+      break;
     default:
-      text = task.recurrence
+      text = task.recurrence;
   }
 
   return (
-    <Badge variant="outline" className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">
+    <Badge
+      variant="outline"
+      className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
+    >
       <Repeat className="mr-1 h-3 w-3" />
       {text}
     </Badge>
-  )
-}
+  );
+};
 
 export function TaskItem({ task }: TaskItemProps) {
-  const { updateTask, deleteTask } = useTaskStore()
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [isSnoozeDialogOpen, setIsSnoozeDialogOpen] = useState(false)
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const { updateTask, deleteTask } = useTaskStore();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isSnoozeDialogOpen, setIsSnoozeDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleToggleComplete = () => {
     updateTask({
       ...task,
       completed: !task.completed,
       completedAt: !task.completed ? new Date().toISOString() : undefined,
-    })
-  }
+    });
+  };
 
   const getPriorityBadge = () => {
     switch (task.priority) {
@@ -71,36 +81,39 @@ export function TaskItem({ task }: TaskItemProps) {
           <Badge variant="outline" className="task-priority-low">
             Low
           </Badge>
-        )
+        );
       case "medium":
         return (
           <Badge variant="outline" className="task-priority-medium">
             Medium
           </Badge>
-        )
+        );
       case "high":
         return (
           <Badge variant="outline" className="task-priority-high">
             High
           </Badge>
-        )
+        );
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   const getDueDateText = () => {
-    if (!task.dueDate) return null
+    if (!task.dueDate) return null;
 
-    const dueDate = new Date(task.dueDate)
+    const dueDate = new Date(task.dueDate);
 
     if (task.snoozedUntil && new Date(task.snoozedUntil) > new Date()) {
       return (
         <span className="flex items-center text-xs text-muted-foreground">
           <AlarmClock className="mr-1 h-3 w-3" />
-          Snoozed until {formatDistanceToNow(new Date(task.snoozedUntil), { addSuffix: true })}
+          Snoozed until{" "}
+          {formatDistanceToNow(new Date(task.snoozedUntil), {
+            addSuffix: true,
+          })}
         </span>
-      )
+      );
     }
 
     if (isPast(dueDate) && !isToday(dueDate)) {
@@ -109,7 +122,7 @@ export function TaskItem({ task }: TaskItemProps) {
           <Calendar className="mr-1 h-3 w-3" />
           Overdue by {formatDistanceToNow(dueDate)}
         </span>
-      )
+      );
     }
 
     return (
@@ -117,29 +130,34 @@ export function TaskItem({ task }: TaskItemProps) {
         <Calendar className="mr-1 h-3 w-3" />
         Due {formatDistanceToNow(dueDate, { addSuffix: true })}
       </span>
-    )
-  }
+    );
+  };
 
   const getReminderText = () => {
-    if (!task.reminder) return null
+    if (!task.reminder) return null;
 
     return (
       <span className="flex items-center text-xs text-muted-foreground">
         <Bell className="mr-1 h-3 w-3" />
-        Reminder {formatDistanceToNow(new Date(task.reminder), { addSuffix: true })}
+        Reminder{" "}
+        {formatDistanceToNow(new Date(task.reminder), { addSuffix: true })}
       </span>
-    )
-  }
+    );
+  };
 
   return (
     <>
       <div
         className={cn(
           "flex items-start gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50",
-          task.completed && "task-completed",
+          task.completed && "task-completed"
         )}
       >
-        <Checkbox checked={task.completed} onCheckedChange={handleToggleComplete} className="mt-0.5" />
+        <Checkbox
+          checked={task.completed}
+          onCheckedChange={handleToggleComplete}
+          className="mt-0.5"
+        />
 
         <div className="flex-1 space-y-1">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -149,7 +167,11 @@ export function TaskItem({ task }: TaskItemProps) {
               {getRecurrenceBadge(task)}
               {task.labels &&
                 task.labels.map((label) => (
-                  <Badge key={label} variant="secondary" className="flex items-center">
+                  <Badge
+                    key={label}
+                    variant="secondary"
+                    className="flex items-center"
+                  >
                     <Tag className="mr-1 h-3 w-3" />
                     {label}
                   </Badge>
@@ -157,7 +179,11 @@ export function TaskItem({ task }: TaskItemProps) {
             </div>
           </div>
 
-          {task.description && <div className="text-sm text-muted-foreground">{task.description}</div>}
+          {task.description && (
+            <div className="text-sm text-muted-foreground">
+              {task.description}
+            </div>
+          )}
 
           <div className="flex flex-wrap gap-3">
             {getDueDateText()}
@@ -173,8 +199,12 @@ export function TaskItem({ task }: TaskItemProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setIsSnoozeDialogOpen(true)}>Snooze</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setIsSnoozeDialogOpen(true)}>
+              Snooze
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => setIsDeleteDialogOpen(true)}
@@ -186,9 +216,17 @@ export function TaskItem({ task }: TaskItemProps) {
         </DropdownMenu>
       </div>
 
-      <TaskDialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} task={task} />
+      <TaskDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        task={task}
+      />
 
-      <SnoozeDialog open={isSnoozeDialogOpen} onOpenChange={setIsSnoozeDialogOpen} task={task} />
+      <SnoozeDialog
+        open={isSnoozeDialogOpen}
+        onOpenChange={setIsSnoozeDialogOpen}
+        task={task}
+      />
 
       <ConfirmDialog
         open={isDeleteDialogOpen}
@@ -198,5 +236,5 @@ export function TaskItem({ task }: TaskItemProps) {
         onConfirm={() => deleteTask(task.id)}
       />
     </>
-  )
+  );
 }

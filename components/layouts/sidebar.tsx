@@ -61,7 +61,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       toast({
         title: "You are now logged out!",
         description: "Login to sync your tasks to your account.",
-        duration: 2000,
+        duration: 5000,
         variant: "destructive",
       })
       router.push("/")

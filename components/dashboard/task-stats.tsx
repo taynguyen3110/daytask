@@ -1,46 +1,56 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useTaskStore } from "@/lib/stores/task-store"
-import { CheckCircle, Clock, AlertTriangle, CalendarClock } from "lucide-react"
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTaskStore } from "@/lib/stores/task-store";
+import { CheckCircle, Clock, AlertTriangle, CalendarClock } from "lucide-react";
 
 export function TaskStats() {
-  const { tasks } = useTaskStore()
+  const { tasks } = useTaskStore();
   const [stats, setStats] = useState({
     total: 0,
     completedThisWeek: 0,
     overdue: 0,
     dueSoon: 0,
-  })
+  });
 
   useEffect(() => {
-    const now = new Date()
-    const startOfWeek = new Date(now)
-    startOfWeek.setDate(now.getDate() - now.getDay())
-    startOfWeek.setHours(0, 0, 0, 0)
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
 
-    const endOfToday = new Date(now)
-    endOfToday.setHours(23, 59, 59, 999)
+    const endOfToday = new Date(now);
+    endOfToday.setHours(23, 59, 59, 999);
 
-    const threeDaysFromNow = new Date(now)
-    threeDaysFromNow.setDate(now.getDate() + 3)
+    const threeDaysFromNow = new Date(now);
+    threeDaysFromNow.setDate(now.getDate() + 3);
 
-    setStats({
-      total: tasks.length,
-      completedThisWeek: tasks.filter(
-        (task) => task.completed && task.completedAt && new Date(task.completedAt) >= startOfWeek,
-      ).length,
-      overdue: tasks.filter((task) => !task.completed && task.dueDate && new Date(task.dueDate) < endOfToday).length,
-      dueSoon: tasks.filter(
-        (task) =>
-          !task.completed &&
-          task.dueDate &&
-          new Date(task.dueDate) > endOfToday &&
-          new Date(task.dueDate) <= threeDaysFromNow,
-      ).length,
-    })
-  }, [tasks])
+    if (tasks.length !== 0) {
+      setStats({
+        total: tasks.length,
+        completedThisWeek: tasks.filter(
+          (task) =>
+            task.completed &&
+            task.completedAt &&
+            new Date(task.completedAt) >= startOfWeek
+        ).length,
+        overdue: tasks.filter(
+          (task) =>
+            !task.completed &&
+            task.dueDate &&
+            new Date(task.dueDate) < endOfToday
+        ).length,
+        dueSoon: tasks.filter(
+          (task) =>
+            !task.completed &&
+            task.dueDate &&
+            new Date(task.dueDate) > endOfToday &&
+            new Date(task.dueDate) <= threeDaysFromNow
+        ).length,
+      });
+    }
+  }, [tasks]);
 
   const stats_data = [
     {
@@ -71,7 +81,7 @@ export function TaskStats() {
       color: "text-yellow-500",
       bgColor: "bg-yellow-100 dark:bg-yellow-900",
     },
-  ]
+  ];
 
   return (
     <>
@@ -89,5 +99,5 @@ export function TaskStats() {
         </Card>
       ))}
     </>
-  )
+  );
 }

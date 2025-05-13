@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import type { Task } from "@/lib/types";
 import { useNotifications } from "@/lib/hooks/use-notifications";
-import api from "@/lib/api"
+import api from "@/lib/api";
 
 interface TaskStore {
   tasks: Task[];
@@ -15,18 +15,26 @@ interface TaskStore {
   syncTasks: () => Promise<void>;
 }
 
-
 export const useTaskStore = create<TaskStore>((set, get) => ({
   tasks: [],
   pendingSync: 0,
 
   fetchTasks: async () => {
     try {
-      const tasks = await api.fetchTasks();
+      let tasks = await api.fetchTasks();
+      tasks = tasks.map((task) => {
+        return {
+          ...task,
+          dueDate: new Date(task.dueDate! + "Z").toLocaleString(),
+          createdAt: new Date(task.createdAt! + "Z").toLocaleString(),
+          updatedAt: new Date(task.updatedAt! + "Z").toLocaleString(),
+          completedAt: new Date(task.completedAt! + "Z").toLocaleString(),
+          reminder: new Date(task.reminder! + "Z").toLocaleString(),
+          snoozedUntil: new Date(task.snoozedUntil! + "Z").toLocaleString(),
+        };
+      });
       set({ tasks });
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-    }
+    } catch (error) {}
   },
 
   createTask: async (task: Partial<Task>) => {

@@ -31,15 +31,18 @@ export function TaskHeatmap() {
     }
 
     // Count completed tasks by date
-    tasks.forEach((task) => {
-      if (task.completed && task.completedAt) {
-        const dateStr = new Date(task.completedAt).toISOString().split("T")[0];
-        if (data[dateStr] !== undefined) {
-          data[dateStr] += 1;
+    if (tasks.length !== 0) {
+      tasks.forEach((task) => {
+        if (task.completed && task.completedAt) {
+          const dateStr = new Date(task.completedAt)
+            .toISOString()
+            .split("T")[0];
+          if (data[dateStr] !== undefined) {
+            data[dateStr] += 1;
+          }
         }
-      }
-    });
-
+      });
+    }
     setHeatmapData(data);
   }, [tasks]);
 
