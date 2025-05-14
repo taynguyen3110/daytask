@@ -1,10 +1,10 @@
-# TaskMaster
+# DayTask
 
 A modern, feature-rich task management application built with Next.js and TypeScript.
 
 ## Description
 
-TaskMaster is a powerful task management application designed to help users organize their work and personal tasks efficiently. It provides a clean, intuitive interface with real-time updates and offline capabilities, making it perfect for both personal and professional use.
+DayTask is a powerful task management application designed to help users organize their work and personal tasks efficiently. It provides a clean, intuitive interface with real-time updates and offline capabilities, making it perfect for both personal and professional use.
 
 ## Key Features
 
@@ -54,8 +54,8 @@ TaskMaster is a powerful task management application designed to help users orga
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/taskmaster.git
-   cd taskmaster
+   git clone https://github.com/yourusername/daytask.git
+   cd daytask
    ```
 
 2. Install dependencies:
@@ -114,7 +114,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact & Acknowledgments
 
-- Project Link: [https://github.com/yourusername/taskmaster](https://github.com/yourusername/taskmaster)
+- Project Link: [https://github.com/yourusername/daytask](https://github.com/yourusername/daytask)
 - Built with [Next.js](https://nextjs.org/)
 - UI Components from [Radix UI](https://www.radix-ui.com/)
 - Icons from [Lucide](https://lucide.dev/)

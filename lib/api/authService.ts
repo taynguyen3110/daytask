@@ -49,7 +49,6 @@ export const authService = {
 
   checkAuth(): AuthState {
     const auth = localStorage.getItem("auth");
-    
     if (!auth) {
       return { isAuthenticated: false, token: null, user: null };
     }

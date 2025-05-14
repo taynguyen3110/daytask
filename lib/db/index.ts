@@ -1,7 +1,7 @@
 import Dexie, { Table } from "dexie";
 import { Task, Note, Notification, Settings, User } from "@/lib/types";
 
-class TaskMasterDB extends Dexie {
+class DayTaskDB extends Dexie {
   tasks!: Table<Task>;
   notes!: Table<Note>;
   notifications!: Table<Notification>;
@@ -9,7 +9,7 @@ class TaskMasterDB extends Dexie {
   users!: Table<User>;
 
   constructor() {
-    super("TaskMasterDB");
+    super("DayTaskDB");
     this.version(1).stores({
       tasks: "id, title, completed, dueDate, priority, labels, userId",
       notes: "id, content, createdAt, updatedAt",
@@ -20,7 +20,7 @@ class TaskMasterDB extends Dexie {
   }
 }
 
-export const db = new TaskMasterDB();
+export const db = new DayTaskDB();
 
 export const taskDB = {
   async addTask(task: Task) {
@@ -98,6 +98,6 @@ export const settingsDB = {
   },
 
   async updateSettings(settings: Settings) {
-    await db.settings.put({ ...settings, id: "settings" });
+    await db.settings.put(settings);
   },
 };
