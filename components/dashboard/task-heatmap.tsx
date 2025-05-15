@@ -33,8 +33,8 @@ export function TaskHeatmap() {
     // Count completed tasks by date
     if (tasks.length !== 0) {
       tasks.forEach((task) => {
-        if (task.completed && task.updatedAt) {
-          const dateStr = new Date(task.updatedAt)
+        if (task.completed && task.completedAt) {
+          const dateStr = new Date(task.completedAt)
             .toISOString()
             .split("T")[0];
           if (data[dateStr] !== undefined) {

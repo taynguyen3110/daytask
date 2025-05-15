@@ -23,7 +23,8 @@ export const noteService = {
     return response.data;
   },
 
-  deleteNote: async (id: string): Promise<void> => {
+  deleteNote: async (id: string): Promise<boolean> => {
    const response = await api.delete<boolean>(`${URL}/${id}`);
+   return response.data;
   },
 };
