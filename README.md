@@ -1,6 +1,6 @@
 # DayTask
 
-A modern, feature-rich task management application built with Next.js and TypeScript.
+A modern, feature-rich task management application built with Next.js and TypeScript, with backend built with .NET.
 
 ## Description
 
