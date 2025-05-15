@@ -5,6 +5,7 @@ A modern, feature-rich task management application built with Next.js and TypeSc
 ## Description
 
 DayTask is a powerful task management application designed to help users organize their work and personal tasks efficiently. It provides a clean, intuitive interface with real-time updates and offline capabilities, making it perfect for both personal and professional use.
+- **Live Demo**: [Live API Demo](https://daytask.vercel.app/)
 
 ## Key Features
 
@@ -33,9 +34,10 @@ DayTask is a powerful task management application designed to help users organiz
 - **Charts**: Recharts
 
 ### Backend
-- **Runtime**: Node.js
-- **API**: Next.js API Routes
-- **Database**: IndexedDB (via Dexie.js)
+- **Runtime**: .NET (ASP.NET Core)
+- **API**: ASP.NET Core Web API
+- **Database**: SQL Server
+- **Repository**: [GitHub - Backend Repo]([https://github.com/taynguyen3110/daytaskAPI])
 
 ### Development Tools
 - **Package Manager**: pnpm
