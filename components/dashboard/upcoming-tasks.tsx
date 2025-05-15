@@ -10,6 +10,31 @@ import type { Task } from "@/lib/types";
 import { getRecurrenceBadge } from "../tasks/task-item";
 import { Tag } from "lucide-react";
 
+export const getPriorityBadge = (priority: string) => {
+  switch (priority) {
+    case "low":
+      return (
+        <Badge variant="outline" className="task-priority-low">
+          Low
+        </Badge>
+      );
+    case "medium":
+      return (
+        <Badge variant="outline" className="task-priority-medium">
+          Medium
+        </Badge>
+      );
+    case "high":
+      return (
+        <Badge variant="outline" className="task-priority-high">
+          High
+        </Badge>
+      );
+    default:
+      return null;
+  }
+};
+
 export function UpcomingTasks() {
   const { tasks, updateTask } = useTaskStore();
   const [upcomingTasks, setUpcomingTasks] = useState<Task[]>([]);
@@ -44,31 +69,6 @@ export function UpcomingTasks() {
     });
   };
 
-  const getPriorityBadge = (priority: string) => {
-    switch (priority) {
-      case "low":
-        return (
-          <Badge variant="outline" className="task-priority-low">
-            Low
-          </Badge>
-        );
-      case "medium":
-        return (
-          <Badge variant="outline" className="task-priority-medium">
-            Medium
-          </Badge>
-        );
-      case "high":
-        return (
-          <Badge variant="outline" className="task-priority-high">
-            High
-          </Badge>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -92,7 +92,7 @@ export function UpcomingTasks() {
                   <div className="flex flex-wrap items-center justify-between">
                     <div className="font-medium">{task.title}</div>
                     <div className="flex gap-2 flex-wrap">
-                      {getPriorityBadge(task.priority)}
+                      {getPriorityBadge(task.priority!)}
                       {getRecurrenceBadge(task)}
                       {task.labels &&
                         task.labels.map((label) => (
