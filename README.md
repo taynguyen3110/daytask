@@ -37,7 +37,7 @@ DayTask is a powerful task management application designed to help users organiz
 - **Runtime**: .NET (ASP.NET Core)
 - **API**: ASP.NET Core Web API
 - **Database**: SQL Server
-- **Repository**: [GitHub - Backend Repo]([https://github.com/taynguyen3110/daytaskAPI])
+- **Repository**: [GitHub - Backend Repo](https://github.com/taynguyen3110/daytaskAPI)
 
 ### Development Tools
 - **Package Manager**: pnpm
