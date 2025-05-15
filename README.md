@@ -1,10 +1,11 @@
 # DayTask
 
-A modern, feature-rich task management application built with Next.js and TypeScript.
+A modern, feature-rich task management application built with Next.js and TypeScript, with backend built with .NET.
 
 ## Description
 
 DayTask is a powerful task management application designed to help users organize their work and personal tasks efficiently. It provides a clean, intuitive interface with real-time updates and offline capabilities, making it perfect for both personal and professional use.
+- **Live Demo - In Progress**: [Live Demo](https://daytask.vercel.app/)
 
 ## Key Features
 
@@ -12,9 +13,8 @@ DayTask is a powerful task management application designed to help users organiz
 - 📝 **Task Management** - Create, edit, and organize tasks with ease
 - 📱 **Responsive Design** - Seamless experience across all devices
 - 🌙 **Dark Mode** - Built-in dark/light theme support
-- 📊 **Task Analytics** - Visual insights into your productivity
 - 🔄 **Real-time Updates** - Instant synchronization across devices
-- 💾 **Offline Support** - Work without internet connection
+- 💾 **Offline Support** - Work without internet connection (Coming up)
 - 🎯 **Task Categories** - Organize tasks with custom categories
 - 🔔 **Notifications** - Stay updated with task reminders
 - 📝 **Notes Integration** - Attach notes to tasks for better context
@@ -27,55 +27,20 @@ DayTask is a powerful task management application designed to help users organiz
 - **UI Library**: React 19
 - **Styling**: Tailwind CSS
 - **State Management**: Zustand
-- **Form Handling**: React Hook Form + Zod
-- **UI Components**: Radix UI
-- **Icons**: Lucide React
-- **Charts**: Recharts
 
 ### Backend
-- **Runtime**: Node.js
-- **API**: Next.js API Routes
-- **Database**: IndexedDB (via Dexie.js)
+- **Runtime**: .NET (ASP.NET Core)
+- **API**: ASP.NET Core Web API
+- **Database**: SQL Server
+- **Repository**: [GitHub - Backend Repo](https://github.com/taynguyen3110/daytaskAPI)
 
 ### Development Tools
 - **Package Manager**: pnpm
 - **Type Checking**: TypeScript
-- **Linting**: ESLint
 - **Build Tool**: Next.js
 - **Analytics**: Vercel Analytics
 
 ## Getting Started
-
-### Prerequisites
-- Node.js (v18 or higher)
-- pnpm (recommended) or npm
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/daytask.git
-   cd daytask
-   ```
-
-2. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-
-3. Run the development server:
-   ```bash
-   pnpm dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Building for Production
-
-```bash
-pnpm build
-pnpm start
-```
 
 ## Usage
 
@@ -114,11 +79,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact & Acknowledgments
 
-- Project Link: [https://github.com/yourusername/daytask](https://github.com/yourusername/daytask)
 - Built with [Next.js](https://nextjs.org/)
 - UI Components from [Radix UI](https://www.radix-ui.com/)
 - Icons from [Lucide](https://lucide.dev/)
 
 ---
 
-Made with ❤️ by [Your Name] 
+Made with ❤️ by Richard Nguyen 
