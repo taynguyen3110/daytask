@@ -79,11 +79,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact & Acknowledgments
 
-- Project Link: [https://github.com/yourusername/daytask](https://github.com/yourusername/daytask)
 - Built with [Next.js](https://nextjs.org/)
 - UI Components from [Radix UI](https://www.radix-ui.com/)
 - Icons from [Lucide](https://lucide.dev/)
 
 ---
 
-Made with ❤️ by [Your Name] 
+Made with ❤️ by Richard Nguyen 
