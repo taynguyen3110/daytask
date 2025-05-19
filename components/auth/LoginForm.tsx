@@ -19,7 +19,7 @@ const LoginForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const login = useAuthStore((state) => state.login);
+  const {login, setSyncData} = useAuthStore();
   const router = useRouter();
 
   const {
@@ -34,14 +34,16 @@ const LoginForm: React.FC = () => {
 
     try {
       await login(data.email, data.password);
-      toast({
-        title: "You are now logged in.",
-        variant: "success",
-        duration: 2000,
-      });
+      // toast({
+      //   title: "You are now logged in.",
+      //   variant: "success",
+      //   duration: 2000,
+      // });
+      setSyncData(true);
       router.push("/");
+      setSuccessMessage("Login successful!");
     } catch (err: any) {
-      setError(err.response?.data?.message);
+      setError(err.response?.data?.Message);
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +89,11 @@ const LoginForm: React.FC = () => {
               required: "Email is required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
+                message: "A valid email address is required",
+              },
+              maxLength: {
+                value: 100,
+                message: "Email cannot exceed 100 characters",
               },
             })}
           />
@@ -109,8 +115,12 @@ const LoginForm: React.FC = () => {
             {...register("password", {
               required: "Password is required",
               minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters",
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+              maxLength: {
+                value: 100,
+                message: "Password cannot exceed 100 characters",
               },
             })}
           />

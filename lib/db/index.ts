@@ -27,6 +27,10 @@ export const taskDB = {
     await db.tasks.add(task);
   },
 
+  async addTasks(tasks: Task[]) {
+    await db.tasks.bulkAdd(tasks);
+  },
+
   async getTask(id: string): Promise<Task | undefined> {
     return db.tasks.get(id);
   },
@@ -41,6 +45,10 @@ export const taskDB = {
 
   async deleteTask(id: string) {
     await db.tasks.delete(id);
+  },
+
+  async syncAllTasks(newTasks: Task[]) {
+    await replaceAllItems(db.tasks, newTasks);
   },
 };
 
@@ -63,6 +71,10 @@ export const noteDB = {
 
   async deleteNote(id: string) {
     await db.notes.delete(id);
+  },
+
+  async syncAllNotes(newNotes: Note[]) {
+    await replaceAllItems(db.notes, newNotes);
   },
 };
 
@@ -90,6 +102,10 @@ export const notificationDB = {
   async deleteNotification(id: string) {
     await db.notifications.delete(id);
   },
+
+  async syncAllNotifications(newNotifications: Notification[]) {
+    await replaceAllItems(db.notifications, newNotifications);
+  },
 };
 
 export const settingsDB = {
@@ -100,4 +116,15 @@ export const settingsDB = {
   async updateSettings(settings: Settings) {
     await db.settings.put(settings);
   },
+
+  async syncSettings(settings: Settings) {
+    await db.settings.put(settings);
+  },
 };
+
+const replaceAllItems = async <T>(table: Table<T>, newItems: T[]) => {
+    await table.db.transaction('rw', table, async () => {
+      await table.clear(); // Clear old tasks
+      await table.bulkAdd(newItems); // Add new ones
+    });
+  }

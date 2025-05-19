@@ -12,7 +12,7 @@ export interface Task {
   recurrence?: string;
   reminder?: string;
   snoozedUntil?: string;
-  userId?: string;
+  userId: string | "";
 }
 
 export interface Note {
@@ -52,4 +52,24 @@ export interface AuthState {
   isAuthenticated: boolean;
   token: { accessToken: string; refreshToken: string } | null;
   user: User | null;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data?: T;
+  statusCode: number;
+  errors?: string[];
+}
+
+export interface SyncTask {
+  action: 'add' | 'update' | 'delete',
+  task: Task | string,
+  timestamp: number,
+}
+
+export interface SyncNote {
+  action: 'add' | 'update' | 'delete',
+  note: Note,
+  timestamp: number,
 }

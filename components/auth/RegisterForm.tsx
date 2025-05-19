@@ -41,7 +41,7 @@ const RegisterForm: React.FC = () => {
       router.push('/login');
     } catch (err) {
       const errorMessage =
-        (err as any)?.response?.data?.message || 'Registration failed. Please try again.';
+        (err as any)?.response?.data?.errors || 'Registration failed. Please try again.';
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -74,6 +74,10 @@ const RegisterForm: React.FC = () => {
               value: 3,
               message: 'Username must be at least 3 characters',
             },
+            maxLength: {
+              value: 50,
+              message: 'Username cannot exceed 50 characters',
+            },
           })}
         />
 
@@ -86,7 +90,11 @@ const RegisterForm: React.FC = () => {
             required: 'Email is required',
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Invalid email address',
+              message: 'A valid email address is required',
+            },
+            maxLength: {
+              value: 100,
+              message: 'Email cannot exceed 100 characters',
             },
           })}
         />
@@ -99,8 +107,23 @@ const RegisterForm: React.FC = () => {
           {...registerField('password', {
             required: 'Password is required',
             minLength: {
-              value: 6,
-              message: 'Password must be at least 6 characters',
+              value: 8,
+              message: 'Password must be at least 8 characters',
+            },
+            maxLength: {
+              value: 100,
+              message: 'Password cannot exceed 100 characters',
+            },
+            validate: {
+              hasUpper: (v) =>
+                /[A-Z]/.test(v) || 'Password must contain at least one uppercase letter',
+              hasLower: (v) =>
+                /[a-z]/.test(v) || 'Password must contain at least one lowercase letter',
+              hasNumber: (v) =>
+                /[0-9]/.test(v) || 'Password must contain at least one number',
+              hasSpecial: (v) =>
+                /[^a-zA-Z0-9]/.test(v) ||
+                'Password must contain at least one special character',
             },
           })}
         />
@@ -112,7 +135,8 @@ const RegisterForm: React.FC = () => {
           error={errors.confirmPassword?.message}
           {...registerField('confirmPassword', {
             required: 'Please confirm your password',
-            validate: (value) => value === password || 'Passwords do not match',
+            validate: (value) =>
+              value === password || 'Passwords do not match',
           })}
         />
 

@@ -13,6 +13,8 @@ interface AuthStore extends AuthState {
   logout: () => void;
   initialize: () => Promise<void>;
   message: string;
+  syncData: boolean;
+  setSyncData: (syncData: boolean) => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -20,15 +22,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   token: null,
   message: "",
+  syncData: false,
+  setSyncData: (isSync: boolean) => set({ syncData: isSync }),
 
   login: async (email, password) => {
-    try {
-      const authState = await authService.login({ email, password });
-      set(authState);
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
-    }
+    const authState = await authService.login({ email, password });
+    set(authState);
   },
 
   register: async (username, email, password, confirmPassword) => {

@@ -1,32 +1,37 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
-import { Sidebar } from "@/components/layouts/sidebar"
-import { MobileHeader } from "@/components/layouts/mobile-header"
-import { SyncStatus } from "@/components/sync-status"
-import { useTaskStore } from "@/lib/stores/task-store"
-import { useNetworkStatus } from "@/lib/hooks/use-network-status"
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { Sidebar } from "@/components/layouts/sidebar";
+import { MobileHeader } from "@/components/layouts/mobile-header";
+import { SyncStatus } from "@/components/sync-status";
+import { useTaskStore } from "@/lib/stores/task-store";
+import { useNetworkStatus } from "@/lib/hooks/use-network-status";
+import { useAuthStore } from "@/lib/stores/auth-store";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const pathname = usePathname()
-  const { isOnline } = useNetworkStatus()
-  const { syncTasks } = useTaskStore()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const pathname = usePathname();
+  const { isOnline } = useNetworkStatus();
+  const { syncTasks } = useTaskStore();
+
+  useEffect(() => {
+    useAuthStore.getState().initialize();
+  }, []);
 
   // Close sidebar when route changes on mobile
   useEffect(() => {
-    setIsSidebarOpen(false)
-  }, [pathname])
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   // Sync tasks when coming back online
   useEffect(() => {
     if (isOnline) {
-      syncTasks()
+      // syncTasks()
     }
-  }, [isOnline, syncTasks])
+  }, [isOnline, syncTasks]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -39,5 +44,5 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         <SyncStatus isOnline={isOnline} />
       </div>
     </div>
-  )
+  );
 }

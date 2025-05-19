@@ -1,5 +1,5 @@
 import api from "./axios";
-import { AuthState, User } from "../types";
+import { ApiResponse, AuthState, User } from "../types";
 
 interface LoginData {
   email: string;
@@ -27,10 +27,17 @@ export interface LoginResponse {
 
 export const authService = {
   async login(data: LoginData): Promise<AuthState> {
-    const response = await api.post<LoginResponse>("/auth/login", data);
-    const token = response.data.token;
-    localStorage.setItem("auth", JSON.stringify(response.data));
-    return { isAuthenticated: true, token, user: response.data.user };
+    const response = await api.post<ApiResponse<LoginResponse>>(
+      "/auth/login",
+      data
+    );
+    const responseData = response.data.data as LoginResponse;
+    localStorage.setItem("auth", JSON.stringify(responseData));
+    return {
+      isAuthenticated: true,
+      token: responseData.token,
+      user: responseData.user,
+    };
   },
 
   async register(data: RegisterData): Promise<RegisterResponse> {
@@ -54,7 +61,11 @@ export const authService = {
     }
     try {
       const authState = JSON.parse(auth);
-      return { isAuthenticated: true, token: authState.token, user: authState.user };
+      return {
+        isAuthenticated: true,
+        token: authState.token,
+        user: authState.user,
+      };
     } catch (error) {
       localStorage.removeItem("auth");
       return { isAuthenticated: false, token: null, user: null };
