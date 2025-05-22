@@ -16,18 +16,10 @@ import { SnoozedTasks } from "@/components/dashboard/snoozed-tasks";
 import { MiniCalendar } from "@/components/dashboard/mini-calendar";
 import { useTaskStore } from "@/lib/stores/task-store";
 import { useConfetti } from "@/lib/hooks/use-confetti";
-import { useAuthStore } from "@/lib/stores/auth-store";
 
 export function Dashboard() {
-  const { tasks, syncTasks } = useTaskStore();
+  const { tasks } = useTaskStore();
   const { showConfetti, ConfettiComponent } = useConfetti();
-  const syncData = useAuthStore((state) => state.syncData); 
-
-  useEffect(() => {
-    if (syncData) {
-      syncTasks();
-    }
-  }, []);
 
   // Check if all tasks are completed
   useEffect(() => {

@@ -41,7 +41,6 @@ export function TaskList() {
 
   // Handle date from URL query params
   useEffect(() => {
-    console.log("userMode", userMode);
     const dateParam = searchParams.get("date")
     if (dateParam) {
       setActiveTab("date")

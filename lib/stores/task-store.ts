@@ -23,12 +23,9 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
   fetchTasks: async () => {
     try {
-      // fetch tasks from indexedDB
+      // Fetch tasks from indexedDB
       let tasks = await api.fetchLocalTasks();
       tasks = tasks.map((task) => {
-        console.log(task.dueDate);
-        console.log(new Date(task.dueDate! + "Z").toLocaleString());
-
         return {
           ...task,
           // dueDate: new Date(task.dueDate! + "Z").toLocaleString(),
@@ -63,6 +60,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     };
     try {
       if (userMode === "online-user") {
+        // Create the task on the server
         await api.createTask(newTask);
       } else if (userMode === "offline-user") {
         const syncAction: SyncTask = {
@@ -72,10 +70,12 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         };
         set((state) => ({ pendingSync: [...state.pendingSync, syncAction] }));
       }
+      // Add the task to the local database
       await taskDB.addTask(newTask);
+      // Add the task to the state
       set((state) => ({ tasks: [...state.tasks, newTask] }));
 
-      // Set reminder notification if needed
+      // Set reminder notification
       if (newTask.reminder) {
         const { addNotification } = useNotifications.getState();
         const reminderDate = new Date(newTask.reminder);
@@ -88,7 +88,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
               taskId: newTask.id,
             });
           }, reminderDate.getTime() - Date.now());
-          // Store this timeout ID to clear it if needed
+          // Store this timeout ID to clear
         }
       }
       return newTask;
@@ -116,7 +116,12 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         };
         set((state) => ({ pendingSync: [...state.pendingSync, syncAction] }));
       }
-      await taskDB.updateTask(task);
+      // Update the task in the local database
+      await taskDB.updateTask(updatedTask);
+      // Update the task in the state
+      set((state) => ({
+        tasks: state.tasks.map((t) => (t.id === task.id ? updatedTask : t)),
+      }));
       return updatedTask;
     } catch (error) {
       console.error("Error updating task:", error);
@@ -127,6 +132,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   deleteTask: async (id: string, userMode: UserMode) => {
     try {
       if (userMode === "online-user") {
+        // Delete the task from the server
         await api.deleteTask(id);
       } else if (userMode === "offline-user") {
         const syncAction: SyncTask = {
@@ -136,7 +142,12 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         };
         set((state) => ({ pendingSync: [...state.pendingSync, syncAction] }));
       }
+      // Remove the task from the local database
       await taskDB.deleteTask(id);
+      // Remove the task from the state
+      set((state) => ({
+        tasks: state.tasks.filter((task) => task.id !== id),
+      }));
     } catch (error) {
       console.error("Error deleting task:", error);
       throw error;
@@ -153,7 +164,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         await taskDB.addTasks(serverTasks);
         set({ tasks: serverTasks });
       } else {
-        // check the pending sync tasks and sync them
+        // For offline -> online user flow: check the pending sync tasks and sync them
         const pendingSync = get().pendingSync;
         for (const syncTask of pendingSync) {
           if (syncTask.action === "add") {

@@ -27,12 +27,17 @@ export const taskDB = {
     const newTask = {
       ...task,
       dueDate: new Date(task.dueDate!).toISOString(),
-    }
+    };
     await db.tasks.add(newTask);
   },
 
   async addTasks(tasks: Task[]) {
-    await db.tasks.bulkAdd(tasks);
+    try {
+      await db.tasks.bulkAdd(tasks);
+    } catch (error) {
+      console.error("Dexie bulkAdd failed:", error, tasks);
+      throw error; // so the calling function still logs it
+    }
   },
 
   async getTask(id: string): Promise<Task | undefined> {
@@ -127,8 +132,8 @@ export const settingsDB = {
 };
 
 const replaceAllItems = async <T>(table: Table<T>, newItems: T[]) => {
-    await table.db.transaction('rw', table, async () => {
-      await table.clear(); // Clear old tasks
-      await table.bulkAdd(newItems); // Add new ones
-    });
-  }
+  await table.db.transaction("rw", table, async () => {
+    await table.clear(); // Clear old tasks
+    await table.bulkAdd(newItems); // Add new ones
+  });
+};

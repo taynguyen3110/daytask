@@ -16,10 +16,10 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { isOnline } = useNetworkStatus();
   const { syncTasks } = useTaskStore();
+  const syncData = useAuthStore((state) => state.syncData);
 
   useEffect(() => {
     useAuthStore.getState().initialize();
-    console.log(isOnline)
   }, []);
 
   // Close sidebar when route changes on mobile
@@ -29,10 +29,11 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   // Sync tasks when coming back online
   useEffect(() => {
-    if (isOnline) {
-      // syncTasks()
+    if (syncData) {
+      console.log("Syncing tasks...");
+      syncTasks();
     }
-  }, [isOnline, syncTasks]);
+  }, [isOnline, syncData]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">

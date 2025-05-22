@@ -66,14 +66,17 @@ export function TaskItem({ task }: TaskItemProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSnoozeDialogOpen, setIsSnoozeDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const {userMode} = useMode();
+  const { userMode } = useMode();
 
   const handleToggleComplete = () => {
-    updateTask({
-      ...task,
-      completed: !task.completed,
-      completedAt: !task.completed ? new Date().toISOString() : undefined,
-    }, userMode);
+    updateTask(
+      {
+        ...task,
+        completed: !task.completed,
+        completedAt: !task.completed ? new Date().toISOString() : undefined,
+      },
+      userMode
+    );
   };
 
   const getPriorityBadge = () => {
@@ -103,13 +106,7 @@ export function TaskItem({ task }: TaskItemProps) {
 
   const getDueDateText = () => {
     if (!task.dueDate) return null;
-
     const dueDate = new Date(task.dueDate);
-    console.log("Due date:", dueDate);
-    console.log("Task due date:", task.dueDate);
-    
-    
-
     if (task.snoozedUntil && new Date(task.snoozedUntil) > new Date()) {
       return (
         <span className="flex items-center text-xs text-muted-foreground">
