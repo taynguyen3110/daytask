@@ -19,6 +19,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     useAuthStore.getState().initialize();
+    console.log(isOnline)
   }, []);
 
   // Close sidebar when route changes on mobile

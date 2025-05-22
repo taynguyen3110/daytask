@@ -73,3 +73,5 @@ export interface SyncNote {
   note: Note,
   timestamp: number,
 }
+
+export type UserMode = 'online-user' | 'offline-user';

@@ -26,6 +26,7 @@ import { useTaskStore } from "@/lib/stores/task-store";
 import type { Task } from "@/lib/types";
 import { formatDistanceToNow, isPast, isToday } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useMode } from "@/lib/hooks/use-mode";
 
 interface TaskItemProps {
   task: Task;
@@ -65,13 +66,14 @@ export function TaskItem({ task }: TaskItemProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSnoozeDialogOpen, setIsSnoozeDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const {userMode} = useMode();
 
   const handleToggleComplete = () => {
     updateTask({
       ...task,
       completed: !task.completed,
       completedAt: !task.completed ? new Date().toISOString() : undefined,
-    });
+    }, userMode);
   };
 
   const getPriorityBadge = () => {
@@ -103,6 +105,10 @@ export function TaskItem({ task }: TaskItemProps) {
     if (!task.dueDate) return null;
 
     const dueDate = new Date(task.dueDate);
+    console.log("Due date:", dueDate);
+    console.log("Task due date:", task.dueDate);
+    
+    
 
     if (task.snoozedUntil && new Date(task.snoozedUntil) > new Date()) {
       return (
@@ -233,7 +239,7 @@ export function TaskItem({ task }: TaskItemProps) {
         onOpenChange={setIsDeleteDialogOpen}
         title="Delete Task"
         description="Are you sure you want to delete this task? This action cannot be undone."
-        onConfirm={() => deleteTask(task.id)}
+        onConfirm={() => deleteTask(task.id, userMode)}
       />
     </>
   );

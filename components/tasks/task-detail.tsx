@@ -23,6 +23,7 @@ import { useTaskStore } from "@/lib/stores/task-store";
 import type { Task } from "@/lib/types";
 import { formatDistanceToNow, isPast, isToday, format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useMode } from "@/lib/hooks/use-mode";
 
 interface TaskDetailProps {
   id: string;
@@ -35,6 +36,7 @@ export function TaskDetail({ id }: TaskDetailProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSnoozeDialogOpen, setIsSnoozeDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const {userMode} = useMode();
 
   useEffect(() => {
     fetchTasks();
@@ -65,11 +67,11 @@ export function TaskDetail({ id }: TaskDetailProps) {
       ...task,
       completed: !task.completed,
       completedAt: !task.completed ? new Date().toISOString() : undefined,
-    });
+    }, userMode);
   };
 
   const handleDelete = () => {
-    deleteTask(task.id);
+    deleteTask(task.id, userMode);
     router.push("/tasks");
   };
 

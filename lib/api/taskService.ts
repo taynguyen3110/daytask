@@ -1,8 +1,7 @@
 import { ApiResponse, AuthState, Task } from "../types";
 import api from "./axios";
-import { generateId } from "@/lib/utils";
+import { generateId, getLocalStorageItem } from "@/lib/utils";
 import { taskDB } from "../db";
-import { useMode } from "../hooks/use-mode";
 
 const URL = "/task";
 export const taskService = {
@@ -27,8 +26,8 @@ export const taskService = {
   },
 
   async fetchServerTasks(): Promise<Task[]> {
-    const { currentUser } = useMode();
-    const userId = currentUser?.id;
+    const auth = getLocalStorageItem<AuthState>("auth", {} as AuthState);
+    const userId = auth.user?.id;
     // fetch tasks from API of userID
     const response = await api.get<Task[]>(`${URL}/user/${userId}`);
     if (response.status == 204) {

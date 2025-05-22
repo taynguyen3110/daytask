@@ -1,20 +1,19 @@
 "use client";
 
 import { create } from "zustand";
-import type { SyncTask, Task } from "@/lib/types";
+import type { AuthState, SyncTask, Task, UserMode } from "@/lib/types";
 import { useNotifications } from "@/lib/hooks/use-notifications";
 import api from "@/lib/api";
-import { useMode } from "../hooks/use-mode";
 import { taskDB } from "../db";
-import { generateId } from "../utils";
+import { generateId, getLocalStorageItem } from "../utils";
 
 interface TaskStore {
   tasks: Task[];
   pendingSync: SyncTask[];
   fetchTasks: () => Promise<void>;
-  createTask: (task: Partial<Task>) => Promise<Task>;
-  updateTask: (task: Task) => Promise<Task>;
-  deleteTask: (id: string) => Promise<void>;
+  createTask: (task: Partial<Task>, userMode: UserMode) => Promise<Task>;
+  updateTask: (task: Task, userMode: UserMode) => Promise<Task>;
+  deleteTask: (id: string, userMode: UserMode) => Promise<void>;
   syncTasks: () => Promise<void>;
 }
 
@@ -27,6 +26,9 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       // fetch tasks from indexedDB
       let tasks = await api.fetchLocalTasks();
       tasks = tasks.map((task) => {
+        console.log(task.dueDate);
+        console.log(new Date(task.dueDate! + "Z").toLocaleString());
+
         return {
           ...task,
           dueDate: new Date(task.dueDate! + "Z").toLocaleString(),
@@ -41,8 +43,9 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     } catch (error) {}
   },
 
-  createTask: async (task: Partial<Task>) => {
-    const { userMode, currentUser } = useMode();
+  createTask: async (task: Partial<Task>, userMode: UserMode) => {
+    const auth = getLocalStorageItem<AuthState>("auth", {} as AuthState);
+    const currentUser = auth.user;
     const newTask: Task = {
       id: generateId(),
       title: task.title || "",
@@ -94,8 +97,9 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     }
   },
 
-  updateTask: async (task: Task) => {
-    const { userMode } = useMode();
+  updateTask: async (task: Task, userMode: UserMode) => {
+    const auth = getLocalStorageItem<AuthState>("auth", {} as AuthState);
+    const currentUser = auth.user;
     const updatedTask = {
       ...task,
       updatedAt: new Date().toISOString(),
@@ -119,8 +123,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     }
   },
 
-  deleteTask: async (id: string) => {
-    const { userMode } = useMode();
+  deleteTask: async (id: string, userMode: UserMode) => {
     try {
       if (userMode === "online-user") {
         await api.deleteTask(id);

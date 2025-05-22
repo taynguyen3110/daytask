@@ -33,6 +33,7 @@ import { useTaskStore } from "@/lib/stores/task-store";
 import type { Task } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useMode } from "@/lib/hooks/use-mode";
 
 interface TaskDialogProps {
   open: boolean;
@@ -57,6 +58,7 @@ export function TaskDialog({
   const [labels, setLabels] = useState<string[]>([]);
   const [newLabel, setNewLabel] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { userMode } = useMode();
 
   // Reset form when dialog opens/closes or task changes
   useEffect(() => {
@@ -118,12 +120,15 @@ export function TaskDialog({
     };
 
     if (task) {
-      updateTask({
-        ...task,
-        ...taskData,
-      });
+      updateTask(
+        {
+          ...task,
+          ...taskData,
+        },
+        userMode
+      );
     } else {
-      createTask(taskData);
+      createTask(taskData, userMode);
     }
 
     onOpenChange(false);
