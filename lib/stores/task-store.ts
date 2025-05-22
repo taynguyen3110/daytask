@@ -31,12 +31,12 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
         return {
           ...task,
-          dueDate: new Date(task.dueDate! + "Z").toLocaleString(),
-          createdAt: new Date(task.createdAt! + "Z").toLocaleString(),
-          updatedAt: new Date(task.updatedAt! + "Z").toLocaleString(),
-          completedAt: new Date(task.completedAt! + "Z").toLocaleString(),
-          reminder: new Date(task.reminder! + "Z").toLocaleString(),
-          snoozedUntil: new Date(task.snoozedUntil! + "Z").toLocaleString(),
+          // dueDate: new Date(task.dueDate! + "Z").toLocaleString(),
+          // createdAt: new Date(task.createdAt! + "Z").toLocaleString(),
+          // updatedAt: new Date(task.updatedAt! + "Z").toLocaleString(),
+          // completedAt: new Date(task.completedAt! + "Z").toLocaleString(),
+          // reminder: new Date(task.reminder! + "Z").toLocaleString(),
+          // snoozedUntil: new Date(task.snoozedUntil! + "Z").toLocaleString(),
         };
       });
       set({ tasks });
@@ -73,6 +73,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         set((state) => ({ pendingSync: [...state.pendingSync, syncAction] }));
       }
       await taskDB.addTask(newTask);
+      set((state) => ({ tasks: [...state.tasks, newTask] }));
 
       // Set reminder notification if needed
       if (newTask.reminder) {

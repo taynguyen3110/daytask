@@ -26,10 +26,9 @@ export const taskDB = {
   async addTask(task: Task) {
     const newTask = {
       ...task,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      dueDate: new Date(task.dueDate!).toISOString(),
     }
-    await db.tasks.add(task);
+    await db.tasks.add(newTask);
   },
 
   async addTasks(tasks: Task[]) {
