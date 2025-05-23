@@ -15,6 +15,7 @@ interface TaskStore {
   updateTask: (task: Task, userMode: UserMode) => Promise<Task>;
   deleteTask: (id: string, userMode: UserMode) => Promise<void>;
   syncTasks: () => Promise<void>;
+  updateTasks: () => Promise<void>;
 }
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
@@ -99,8 +100,6 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   },
 
   updateTask: async (task: Task, userMode: UserMode) => {
-    const auth = getLocalStorageItem<AuthState>("auth", {} as AuthState);
-    const currentUser = auth.user;
     const updatedTask = {
       ...task,
       updatedAt: new Date().toISOString(),
@@ -154,18 +153,18 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     }
   },
 
-  // Run after login
+  // Run after getting online
   syncTasks: async () => {
     try {
-      // get all tasks from server
-      const serverTasks = await api.fetchServerTasks();
-      const localTasks = await taskDB.getAllTasks();
-      if (localTasks.length === 0) {
-        await taskDB.addTasks(serverTasks);
-        set({ tasks: serverTasks });
-      } else {
-        // For offline -> online user flow: check the pending sync tasks and sync them
-        const pendingSync = get().pendingSync;
+      // For offline -> online user flow
+      // const serverTasks = await api.fetchServerTasks();
+      // await taskDB.addTasks(serverTasks);
+      // set((state) => ({ tasks: [...state.tasks, ...serverTasks] }));
+
+      //Check the pending sync tasks and sync them
+      const pendingSync = get().pendingSync;
+      if (pendingSync.length > 0) {
+        //if no pending sync tasks???????
         for (const syncTask of pendingSync) {
           if (syncTask.action === "add") {
             await api.createTask(syncTask.task as Task);
@@ -178,7 +177,21 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         // clear pending sync tasks
         set({ pendingSync: [] });
       }
-      // set indexedDB
+    } catch (error) {
+      console.error("Error syncing tasks:", error);
+    }
+  },
+
+  // Run after login
+  updateTasks: async () => {
+    try {
+      // Get all tasks from server
+      const serverTasks = await api.fetchServerTasks();
+      const localTasks = await taskDB.getAllTasks();
+      // Merge online and offline tasks and update all db
+      await taskDB.addTasks(serverTasks);
+      await api.createTasks(localTasks);
+      set({ tasks: [...localTasks, ...serverTasks] });
     } catch (error) {
       console.error("Error syncing tasks:", error);
     }

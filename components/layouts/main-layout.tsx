@@ -15,11 +15,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
   const { isOnline } = useNetworkStatus();
-  const { syncTasks } = useTaskStore();
-  const syncData = useAuthStore((state) => state.syncData);
+  const { syncTasks, updateTasks, fetchTasks } = useTaskStore();
+  const { syncData, updateData, setSyncData, setUpdateData, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     useAuthStore.getState().initialize();
+    fetchTasks();
   }, []);
 
   // Close sidebar when route changes on mobile
@@ -27,13 +28,23 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     setIsSidebarOpen(false);
   }, [pathname]);
 
+  // Sync tasks when logining in
+  useEffect(() => {
+    if (updateData) {
+      console.log("Updating tasks...");
+      updateTasks();
+      setUpdateData(false);
+    }
+  }, [updateData]);
+
   // Sync tasks when coming back online
   useEffect(() => {
-    if (syncData) {
+    if (syncData && isAuthenticated) {
       console.log("Syncing tasks...");
       syncTasks();
+      setSyncData(false);
     }
-  }, [isOnline, syncData]);
+  }, [syncData]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">

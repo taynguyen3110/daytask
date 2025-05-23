@@ -9,6 +9,7 @@ import Button from "@/components/ui/ButtonAuth";
 import Alert from "@/components/ui/AlertAuth";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { toast } from "@/components/ui/use-toast";
+import { useTaskStore } from "@/lib/stores/task-store";
 
 interface LoginFormData {
   email: string;
@@ -19,7 +20,7 @@ const LoginForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const {login, setSyncData} = useAuthStore();
+  const { login, setUpdateData } = useAuthStore();
   const router = useRouter();
 
   const {
@@ -39,7 +40,7 @@ const LoginForm: React.FC = () => {
       //   variant: "success",
       //   duration: 2000,
       // });
-      setSyncData(true);
+      setUpdateData(true);
       router.push("/");
       setSuccessMessage("Login successful!");
     } catch (err: any) {
