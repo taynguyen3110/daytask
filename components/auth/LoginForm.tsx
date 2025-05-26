@@ -44,7 +44,7 @@ const LoginForm: React.FC = () => {
       router.push("/");
       setSuccessMessage("Login successful!");
     } catch (err: any) {
-      setError(err.response?.data?.Message);
+      setError(err.response?.data?.message);
     } finally {
       setIsLoading(false);
     }
