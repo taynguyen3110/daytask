@@ -5,22 +5,6 @@ import { taskDB } from "../db";
 
 const URL = "/task";
 export const taskService = {
-  //   async fetchTasks(): Promise<Task[]> {
-  //   const { userMode, currentUser } = useMode();
-  //   if (userMode === "authenticated") {
-  //     const userId = currentUser?.id;
-  //     // fetch tasks from API of userID
-  //     const response = await api.get<Task[]>(`${URL}/user/${userId}`);
-  //     if (response.status == 204) {
-  //       return [];
-  //     }
-  //     return response.data;
-  //   } else {
-  //     //if offline, fetch from indexedDB
-  //     return await taskDB.getAllTasks();
-  //   }
-  // },
-
   async fetchLocalTasks(): Promise<Task[]> {
     return await taskDB.getAllTasks();
   },

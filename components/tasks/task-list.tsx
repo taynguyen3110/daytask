@@ -21,7 +21,6 @@ import { TaskDialog } from "@/components/tasks/task-dialog"
 import { useTaskStore } from "@/lib/stores/task-store"
 import type { Task } from "@/lib/types"
 import { format, isToday, isTomorrow, isYesterday, isThisWeek, addDays } from "date-fns"
-import { useMode } from "@/lib/hooks/use-mode"
 
 export function TaskList() {
   const searchParams = useSearchParams()
@@ -34,7 +33,6 @@ export function TaskList() {
   const [sortBy, setSortBy] = useState<"dueDate" | "priority" | "title">("dueDate")
   const [filterPriority, setFilterPriority] = useState<string | null>(null)
   const [filterLabel, setFilterLabel] = useState<string | null>(null)
-  const {userMode} = useMode();
 
   // Get unique labels from all tasks
   const allLabels = tasks.length > 0 ? Array.from(new Set(tasks.flatMap((task) => task.labels || []))) : [];

@@ -28,12 +28,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     setIsSidebarOpen(false);
   }, [pathname]);
 
-  // Sync tasks when logining in
+  // Merge tasks when logining in
   useEffect(() => {
     if (mergeData) {
       console.log("Merging tasks...");
-      mergeTasks();
-      setMergeData(false);
+      (async () => {
+        await mergeTasks();
+        console.log("Done...");
+        setMergeData(false);
+      })();
     }
   }, [mergeData]);
 
@@ -41,8 +44,11 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (syncData) {
       console.log("Syncing tasks...");
-      syncTasks();
-      setSyncData(false);
+      (async () => {
+        await syncTasks();
+        console.log("Done...");
+        setSyncData(false);
+      })();
     }
   }, [syncData]);
 
