@@ -11,11 +11,11 @@ interface SyncStatusProps {
 
 export function SyncStatus({ isOnline }: SyncStatusProps) {
   const { pendingSync } = useTaskStore();
-  const { setSyncData } = useAuthStore();
+  const { setSyncData, isAuthenticated } = useAuthStore();
   const hasPendingChanges = pendingSync.length > 0;
 
   useEffect(() => {
-    if (isOnline) {
+    if (isOnline && isAuthenticated && hasPendingChanges) {
       setSyncData(true);
     }
   }, [isOnline]);

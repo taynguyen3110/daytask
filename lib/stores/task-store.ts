@@ -15,7 +15,8 @@ interface TaskStore {
   updateTask: (task: Task, userMode: UserMode) => Promise<Task>;
   deleteTask: (id: string, userMode: UserMode) => Promise<void>;
   syncTasks: () => Promise<void>;
-  updateTasks: () => Promise<void>;
+  mergeTasks: () => Promise<void>;
+  removeLocalTasks: () => Promise<void>;
 }
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
@@ -29,12 +30,6 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       tasks = tasks.map((task) => {
         return {
           ...task,
-          // dueDate: new Date(task.dueDate! + "Z").toLocaleString(),
-          // createdAt: new Date(task.createdAt! + "Z").toLocaleString(),
-          // updatedAt: new Date(task.updatedAt! + "Z").toLocaleString(),
-          // completedAt: new Date(task.completedAt! + "Z").toLocaleString(),
-          // reminder: new Date(task.reminder! + "Z").toLocaleString(),
-          // snoozedUntil: new Date(task.snoozedUntil! + "Z").toLocaleString(),
         };
       });
       set({ tasks });
@@ -156,11 +151,6 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   // Run after getting online
   syncTasks: async () => {
     try {
-      // For offline -> online user flow
-      // const serverTasks = await api.fetchServerTasks();
-      // await taskDB.addTasks(serverTasks);
-      // set((state) => ({ tasks: [...state.tasks, ...serverTasks] }));
-
       //Check the pending sync tasks and sync them
       const pendingSync = get().pendingSync;
       if (pendingSync.length > 0) {
@@ -183,17 +173,57 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   },
 
   // Run after login
-  updateTasks: async () => {
+  mergeTasks: async () => {
     try {
+      const mergedMap = new Map<string, Task>();
+      const auth = getLocalStorageItem<AuthState>("auth", {} as AuthState);
+      const userId = auth.user!.id;
       // Get all tasks from server
       const serverTasks = await api.fetchServerTasks();
       const localTasks = await taskDB.getAllTasks();
-      // Merge online and offline tasks and update all db
-      await taskDB.addTasks(serverTasks);
-      await api.createTasks(localTasks);
-      set({ tasks: [...localTasks, ...serverTasks] });
+      console.log("Server Tasks:", serverTasks);
+      console.log("Local Tasks:", localTasks);
+
+      for (const task of serverTasks) {
+        mergedMap.set(task.id, task);
+      }
+
+      for (const guestTask of localTasks) {
+        const existing = mergedMap.get(guestTask.id);
+
+        if (!existing) {
+          // Task is only in guest: assign userId and add
+          mergedMap.set(guestTask.id, { ...guestTask, userId });
+        } else {
+          // Conflict: pick the latest one by updatedAt
+          const guestUpdated = new Date(guestTask.updatedAt).getTime();
+          const serverUpdated = new Date(existing.updatedAt).getTime();
+
+          if (guestUpdated > serverUpdated) {
+            mergedMap.set(guestTask.id, { ...guestTask, userId });
+          }
+        }
+      }
+
+      const mergedTasks = Array.from(mergedMap.values());
+
+      // Merge to local db
+      await taskDB.mergeTasks(mergedTasks);
+
+      // Merge to server
+      await api.mergeTasks(mergedTasks);
+      set({ tasks: [...mergedTasks] });
     } catch (error) {
-      console.error("Error syncing tasks:", error);
+      console.error("Error merging tasks:", error);
+    }
+  },
+
+  removeLocalTasks: async () => {
+    try {
+      await taskDB.clearTasks();
+      set({ tasks: [] });
+    } catch (error) {
+      console.error("Error removing local tasks:", error);
     }
   },
 }));

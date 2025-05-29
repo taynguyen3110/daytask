@@ -15,8 +15,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
   const { isOnline } = useNetworkStatus();
-  const { syncTasks, updateTasks, fetchTasks } = useTaskStore();
-  const { syncData, updateData, setSyncData, setUpdateData, isAuthenticated } = useAuthStore();
+  const { syncTasks, mergeTasks, fetchTasks } = useTaskStore();
+  const { syncData, mergeData, setSyncData, setMergeData } = useAuthStore();
 
   useEffect(() => {
     useAuthStore.getState().initialize();
@@ -30,16 +30,16 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   // Sync tasks when logining in
   useEffect(() => {
-    if (updateData) {
-      console.log("Updating tasks...");
-      updateTasks();
-      setUpdateData(false);
+    if (mergeData) {
+      console.log("Merging tasks...");
+      mergeTasks();
+      setMergeData(false);
     }
-  }, [updateData]);
+  }, [mergeData]);
 
   // Sync tasks when coming back online
   useEffect(() => {
-    if (syncData && isAuthenticated) {
+    if (syncData) {
       console.log("Syncing tasks...");
       syncTasks();
       setSyncData(false);

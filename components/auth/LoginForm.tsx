@@ -20,7 +20,7 @@ const LoginForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { login, setUpdateData } = useAuthStore();
+  const { login, setMergeData } = useAuthStore();
   const router = useRouter();
 
   const {
@@ -40,7 +40,7 @@ const LoginForm: React.FC = () => {
       //   variant: "success",
       //   duration: 2000,
       // });
-      setUpdateData(true);
+      setMergeData(true);
       router.push("/");
       setSuccessMessage("Login successful!");
     } catch (err: any) {

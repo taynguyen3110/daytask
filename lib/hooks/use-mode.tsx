@@ -18,7 +18,6 @@ export function useMode() {
       console.log("online user");
     } else if (!isOnline && isAuthenticated) {
       console.log("offline user");
-
       setUserMode("offline-user");
     } else {
       setUserMode("guest");

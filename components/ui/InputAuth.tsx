@@ -1,4 +1,6 @@
-import React, { forwardRef } from "react";
+"use client";
+
+import React, { forwardRef, useId } from "react";
 import clsx from "clsx";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -25,8 +27,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    // Generate a unique ID for the input if one isn't provided
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const reactId = useId();
+    const inputId = id || reactId;
 
     return (
       <div className={clsx("flex flex-col", fullWidth ? "w-full" : "")}>

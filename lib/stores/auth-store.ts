@@ -15,8 +15,8 @@ interface AuthStore extends AuthState {
   message: string;
   syncData: boolean;
   setSyncData: (syncData: boolean) => void;
-  updateData: boolean;
-  setUpdateData: (syncData: boolean) => void;
+  mergeData: boolean;
+  setMergeData: (syncData: boolean) => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -26,8 +26,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   message: "",
   syncData: false,
   setSyncData: (isSync: boolean) => set({ syncData: isSync }),
-  updateData: false,
-  setUpdateData: (isUpdate: boolean) => set({ updateData: isUpdate }),
+  mergeData: false,
+  setMergeData: (isMerge: boolean) => set({ mergeData: isMerge }),
 
   login: async (email, password) => {
     const authState = await authService.login({ email, password });

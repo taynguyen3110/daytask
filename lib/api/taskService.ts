@@ -29,11 +29,11 @@ export const taskService = {
     const auth = getLocalStorageItem<AuthState>("auth", {} as AuthState);
     const userId = auth.user?.id;
     // fetch tasks from API of userID
-    const response = await api.get<Task[]>(`${URL}/user/${userId}`);
+    const response = await api.get<ApiResponse<Task[]>>(`${URL}/user/${userId}`);
     if (response.status == 204) {
       return [];
     }
-    return response.data;
+    return response.data.data!;
   },
 
   async createTask(task: Task): Promise<Task> {
@@ -44,6 +44,10 @@ export const taskService = {
   async createTasks(tasks: Task[]): Promise<Task[]> {
     const response = await api.post<ApiResponse<Task[]>>(`${URL}/bulk`, tasks);
     return response.data.data!;
+  },
+
+  async mergeTasks(tasks: Task[]): Promise<void> {
+    const response = await api.post<ApiResponse<void>>(`${URL}/merge`, tasks);
   },
 
   async updateTask(task: Task): Promise<Task> {

@@ -1,5 +1,6 @@
 import Dexie, { Table } from "dexie";
 import { Task, Note, Notification, Settings, User } from "@/lib/types";
+import { clear } from "console";
 
 class DayTaskDB extends Dexie {
   tasks!: Table<Task>;
@@ -31,9 +32,9 @@ export const taskDB = {
     await db.tasks.add(newTask);
   },
 
-  async addTasks(tasks: Task[]) {
+  async mergeTasks(tasks: Task[]) {
     try {
-      await db.tasks.bulkAdd(tasks);
+      await db.tasks.bulkPut(tasks);
     } catch (error) {
       console.error("Dexie bulkAdd failed:", error, tasks);
       throw error; // so the calling function still logs it
@@ -54,6 +55,10 @@ export const taskDB = {
 
   async deleteTask(id: string) {
     await db.tasks.delete(id);
+  },
+
+  async clearTasks() {
+    await clearTable(db.tasks);
   },
 
   async syncAllTasks(newTasks: Task[]) {
@@ -137,3 +142,7 @@ const replaceAllItems = async <T>(table: Table<T>, newItems: T[]) => {
     await table.bulkAdd(newItems); // Add new ones
   });
 };
+
+const clearTable = async <T>(table: Table<T>) => {
+  await table.clear();
+}
