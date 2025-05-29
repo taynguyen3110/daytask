@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { useAuthStore } from "@/lib/stores/auth-store"; // Zustand store for auth state
+import { useAuthStore } from "@/lib/stores/auth-store";
 import { toast } from "../ui/use-toast";
 import { useTaskStore } from "@/lib/stores/task-store";
 
@@ -76,7 +76,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         title: "You are now logged out!",
         description: "Login to sync your tasks to your account.",
         duration: 5000,
-        variant: "destructive",
+        variant: "info",
       });
       router.push("/");
     } catch (error) {

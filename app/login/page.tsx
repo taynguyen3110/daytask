@@ -9,7 +9,7 @@ const LoginPage: React.FC = () => {
   const { message } = useAuthStore();
 
   return (
-    <div className="min-h-[calc(100vh-132px)] flex items-center justify-center bg-gray-50 dark:bg-background py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[100vh] flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         {message && (
           <Alert variant="success" className="mb-6">
