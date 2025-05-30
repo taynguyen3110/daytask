@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   LayoutDashboard,
   CheckSquare,
@@ -102,7 +103,25 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         )}
       >
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-primary">DayTask</h1>
+          <div className="mt-3 ml-3">
+            {mounted &&
+              (theme === "dark" ? (
+                <Image
+                  src="/logoDark.png"
+                  height={28}
+                  width={107}
+                  alt="DayTask Logo"
+                />
+              ) : (
+                <Image
+                  src="/logoLight.png"
+                  height={28}
+                  width={107}
+                  alt="DayTask Logo"
+                />
+              ))}
+          </div>
+          {/* <h1 className="text-xl font-bold text-primary">DayTask</h1> */}
           <Button
             variant="ghost"
             size="icon"
