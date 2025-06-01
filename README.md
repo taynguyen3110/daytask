@@ -12,11 +12,8 @@ DayTask is a powerful task management application designed to help users organiz
 - 🔐 **User Authentication** - Secure login and registration system
 - 📝 **Task Management** - Create, edit, and organize tasks with ease
 - 📱 **Responsive Design** - Seamless experience across all devices
-- 🌙 **Dark Mode** - Built-in dark/light theme support
-- 🔄 **Real-time Updates** - Instant synchronization across devices
-- 💾 **Offline Support** - Work without internet connection (Coming up)
-- 🎯 **Task Categories** - Organize tasks with custom categories
-- 🔔 **Notifications** - Stay updated with task reminders
+- 💾 **Offline Support** - Work without internet connection
+- 🔔 **Notifications** - Stay updated with task reminders (Coming up)
 - 📝 **Notes Integration** - Attach notes to tasks for better context
 
 ## Tech Stack
@@ -31,11 +28,10 @@ DayTask is a powerful task management application designed to help users organiz
 ### Backend
 - **Runtime**: .NET (ASP.NET Core)
 - **API**: ASP.NET Core Web API
-- **Database**: SQL Server
+- **Database**: Azure SQL Database
 - **Repository**: [GitHub - Backend Repo](https://github.com/taynguyen3110/daytaskAPI)
 
 ### Development Tools
-- **Package Manager**: pnpm
 - **Type Checking**: TypeScript
 - **Build Tool**: Next.js
 - **Analytics**: Vercel Analytics
@@ -44,18 +40,17 @@ DayTask is a powerful task management application designed to help users organiz
 
 ## Usage
 
-1. **Registration/Login**
-   - Create a new account or log in to your existing account
-   - Access your personalized dashboard
+1. **Registration/Login or Guest Mode**
+   - Create a new account or log in to your existing account or just use the app with guest mode
+   - Access your dashboard
 
 2. **Task Management**
-   - Create new tasks using the "+" button
-   - Organize tasks into categories
+   - Create new tasks using the "Add Task" button
    - Set due dates and priorities
    - Mark tasks as complete
 
 3. **Notes**
-   - Add notes to tasks for additional context
+   - Add notes to your account for easy memo
    - Access your notes from the dedicated notes section
 
 4. **Settings**
