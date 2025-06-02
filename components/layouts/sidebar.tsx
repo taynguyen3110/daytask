@@ -15,6 +15,7 @@ import {
   LogIn,
   LogOut,
 } from "lucide-react";
+import { Leckerli_One } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,11 @@ interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
+
+const leckerli = Leckerli_One({
+  subsets: ["latin"],
+  weight: "400",
+});
 
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const pathname = usePathname();
@@ -103,7 +109,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         )}
       >
         <div className="flex items-center justify-between">
-          <div className="mt-3 ml-3">
+          {/* <div className="mt-3 ml-3">
             {mounted &&
               (theme === "dark" ? (
                 <Image
@@ -120,8 +126,12 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                   alt="DayTask Logo"
                 />
               ))}
-          </div>
-          {/* <h1 className="text-xl font-bold text-primary">DayTask</h1> */}
+          </div> */}
+          <h1
+            className={`mt-2 ml-3 text-2xl font-bold text-primary ${leckerli.className}`}
+          >
+            DayTask
+          </h1>
           <Button
             variant="ghost"
             size="icon"

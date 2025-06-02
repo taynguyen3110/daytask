@@ -1,268 +1,21 @@
-import { NextResponse } from "next/server"
-import type { Task } from "@/lib/types"
+import { NextResponse } from "next/server";
+import type { Task } from "@/lib/types";
 
 // This is a mock API route for demonstration purposes
 // In a real application, this would connect to a database
 
-export const tasks: Task[] = [
-  {
-    id: crypto.randomUUID(),
-    title: "Buy groceries",
-    description: "Get milk, eggs, and bread from the supermarket.",
-    completed: false,
-    dueDate: "2025-05-10",
-    priority: "high",
-    labels: ["personal", "errand"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "weekly",
-    reminder: "2025-05-09T10:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Team meeting",
-    description: "Weekly sync with the product team.",
-    completed: false,
-    dueDate: "2025-05-08",
-    priority: "medium",
-    labels: ["work", "meeting"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "weekly",
-    reminder: "2025-05-08T08:30:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Doctor appointment",
-    description: "Annual checkup with Dr. Smith.",
-    completed: false,
-    dueDate: "2025-05-15",
-    priority: "high",
-    labels: ["health"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    reminder: "2025-05-14T18:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Write blog post",
-    description: "Publish article on React performance tips.",
-    completed: false,
-    dueDate: "2025-05-12",
-    priority: "medium",
-    labels: ["writing", "work"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Renew gym membership",
-    description: "Renew membership before it expires.",
-    completed: false,
-    dueDate: "2025-05-11",
-    priority: "low",
-    labels: ["fitness"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "monthly",
-    reminder: "2025-05-10T12:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Laundry",
-    description: "Do a full load of laundry.",
-    completed: false,
-    dueDate: "2025-05-07",
-    priority: "low",
-    labels: ["home"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "weekly",
-    snoozedUntil: "2025-05-08T09:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Prepare presentation",
-    description: "Slides for Friday's marketing strategy review.",
-    completed: false,
-    dueDate: "2025-05-09",
-    priority: "high",
-    labels: ["work", "presentation"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    reminder: "2025-05-08T15:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Read new book",
-    description: "Start reading 'Atomic Habits'.",
-    completed: false,
-    dueDate: "2025-05-20",
-    priority: "low",
-    labels: ["personal", "reading"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Car service",
-    description: "Oil change and general check-up.",
-    completed: false,
-    dueDate: "2025-05-13",
-    priority: "medium",
-    labels: ["maintenance"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "yearly",
-    reminder: "2025-05-12T08:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Call plumber",
-    description: "Fix leaking kitchen sink.",
-    completed: false,
-    dueDate: "2025-05-08",
-    priority: "high",
-    labels: ["home", "urgent"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    reminder: "2025-05-07T17:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Review PRs",
-    description: "Review open pull requests on GitHub.",
-    completed: false,
-    dueDate: "2025-05-07",
-    priority: "medium",
-    labels: ["code", "work"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "daily",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Walk the dog",
-    description: "Evening walk around the neighborhood.",
-    completed: false,
-    dueDate: "2025-05-07",
-    priority: "low",
-    labels: ["pet", "routine"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "daily",
-    snoozedUntil: "2025-05-07T19:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Organize files",
-    description: "Clean up desktop and documents folder.",
-    completed: false,
-    dueDate: "2025-05-14",
-    priority: "low",
-    labels: ["personal", "cleaning"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Pay electricity bill",
-    description: "Bill due for the month of May.",
-    completed: false,
-    dueDate: "2025-05-10",
-    priority: "high",
-    labels: ["bills"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "monthly",
-    reminder: "2025-05-09T10:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Plan weekend trip",
-    description: "Decide location, book stay and car.",
-    completed: false,
-    dueDate: "2025-05-11",
-    priority: "medium",
-    labels: ["travel", "fun"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Water plants",
-    description: "Indoor and balcony plants.",
-    completed: false,
-    dueDate: "2025-05-07",
-    priority: "low",
-    labels: ["routine", "home"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "daily",
-    snoozedUntil: "2025-05-07T12:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Submit timesheet",
-    description: "Don't forget to log hours for the week.",
-    completed: false,
-    dueDate: "2025-05-09",
-    priority: "medium",
-    labels: ["work"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "weekly",
-    reminder: "2025-05-08T09:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Book dentist appointment",
-    description: "Routine cleaning every 6 months.",
-    completed: false,
-    dueDate: "2025-05-20",
-    priority: "low",
-    labels: ["health"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "bi-yearly",
-    reminder: "2025-05-19T14:00:00Z",
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Upload portfolio",
-    description: "Push updated case studies to portfolio site.",
-    completed: false,
-    dueDate: "2025-05-15",
-    priority: "medium",
-    labels: ["career", "work"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Backup phone data",
-    description: "Sync photos and contacts to cloud.",
-    completed: false,
-    dueDate: "2025-05-18",
-    priority: "low",
-    labels: ["tech"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    recurrence: "monthly",
-    reminder: "2025-05-17T17:00:00Z",
-  }
-];
+export const tasks: Task[] = [];
 
 export async function GET() {
-  return NextResponse.json(tasks)
+  return NextResponse.json(tasks);
 }
 
 export async function POST(request: Request) {
-  const body = await request.json()
+  const body = await request.json();
 
   // Validate required fields
   if (!body.title) {
-    return NextResponse.json({ error: "Title is required" }, { status: 400 })
+    return NextResponse.json({ error: "Title is required" }, { status: 400 });
   }
 
   const newTask: Task = {
@@ -278,9 +31,10 @@ export async function POST(request: Request) {
     recurrence: body.recurrence,
     reminder: body.reminder,
     snoozedUntil: body.snoozedUntil,
-  }
+    userId: body.userId || null,
+  };
 
-  tasks.push(newTask)
+  tasks.push(newTask);
 
-  return NextResponse.json(newTask, { status: 201 })
+  return NextResponse.json(newTask, { status: 201 });
 }

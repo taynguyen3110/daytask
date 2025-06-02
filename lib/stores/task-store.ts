@@ -181,8 +181,6 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       // Get all tasks from server
       const serverTasks = await api.fetchServerTasks();
       const localTasks = await taskDB.getAllTasks();
-      console.log("Server Tasks:", serverTasks);
-      console.log("Local Tasks:", localTasks);
 
       for (const task of serverTasks) {
         mergedMap.set(task.id, task);

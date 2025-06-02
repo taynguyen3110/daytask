@@ -1,45 +1,86 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useToast } from "@/components/ui/use-toast"
-import { useSettingsStore } from "@/lib/stores/settings-store"
+import { useEffect, useRef, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast";
+import { useSettingsStore } from "@/lib/stores/settings-store";
+
+declare global {
+  interface Window {
+    onTelegramAuth: (user: any) => void;
+  }
+}
 
 export function Settings() {
-  const { toast } = useToast()
-  const { settings, updateSettings } = useSettingsStore()
-  const [telegramToken, setTelegramToken] = useState(settings.telegramToken || "")
-  const [telegramChatId, setTelegramChatId] = useState(settings.telegramChatId || "")
+  const { toast } = useToast();
+  const { settings, updateSettings, linkTelegram } = useSettingsStore();
+  const [telegramToken, setTelegramToken] = useState(
+    settings.telegramToken || ""
+  );
+  const [telegramChatId, setTelegramChatId] = useState(
+    settings.telegramChatId || ""
+  );
+  const telegramRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!telegramRef.current) return;
+
+    window.onTelegramAuth = async function (user) {
+      console.log("Telegram user:", user);
+      linkTelegram(user);
+    };
+
+    // Prevent re-adding the script on client navigation
+    if (telegramRef.current.querySelector("script")) return;
+
+    const script = document.createElement("script");
+    script.src = "https://telegram.org/js/telegram-widget.js?22";
+    script.setAttribute("data-telegram-login", "DayTask_bot");
+    script.setAttribute("data-size", "large");
+    script.setAttribute("data-onauth", "onTelegramAuth(user)");
+    script.setAttribute("data-request-access", "write");
+    script.setAttribute("data-theme", "dark");
+    script.setAttribute("data-userpic", "false");
+    script.async = true;
+
+    telegramRef.current.appendChild(script);
+  }, []);
 
   const handleSaveTelegramSettings = () => {
     updateSettings({
       ...settings,
       telegramToken,
       telegramChatId,
-    })
+    });
 
     toast({
       title: "Settings saved",
       description: "Your notification settings have been updated.",
-    })
-  }
+    });
+  };
 
   const handleToggleSetting = (key: string, value: boolean) => {
     updateSettings({
       ...settings,
       [key]: value,
-    })
+    });
 
     toast({
       title: "Setting updated",
       description: `${key} has been ${value ? "enabled" : "disabled"}.`,
-    })
-  }
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -47,7 +88,7 @@ export function Settings() {
         <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
       </div>
 
-      <Tabs defaultValue="general">
+      <Tabs defaultValue="notifications">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
@@ -58,7 +99,9 @@ export function Settings() {
           <Card>
             <CardHeader>
               <CardTitle>Appearance</CardTitle>
-              <CardDescription>Customize how DayTask looks and feels</CardDescription>
+              <CardDescription>
+                Customize how DayTask looks and feels
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
@@ -70,7 +113,9 @@ export function Settings() {
                 </div>
                 <Switch
                   checked={settings.autoSuggestDueDates}
-                  onCheckedChange={(checked) => handleToggleSetting("autoSuggestDueDates", checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggleSetting("autoSuggestDueDates", checked)
+                  }
                 />
               </div>
 
@@ -83,7 +128,9 @@ export function Settings() {
                 </div>
                 <Switch
                   checked={settings.showConfetti}
-                  onCheckedChange={(checked) => handleToggleSetting("showConfetti", checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggleSetting("showConfetti", checked)
+                  }
                 />
               </div>
             </CardContent>
@@ -94,7 +141,9 @@ export function Settings() {
           <Card>
             <CardHeader>
               <CardTitle>Telegram Notifications</CardTitle>
-              <CardDescription>Configure Telegram bot for task reminders</CardDescription>
+              <CardDescription>
+                Configure Telegram bot for task reminders
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-2">
@@ -120,32 +169,51 @@ export function Settings() {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Enable Telegram notifications</Label>
-                  <p className="text-sm text-muted-foreground">Send task reminders via Telegram</p>
+                  <p className="text-sm text-muted-foreground">
+                    Send task reminders via Telegram
+                  </p>
                 </div>
                 <Switch
                   checked={settings.enableTelegramNotifications}
-                  onCheckedChange={(checked) => handleToggleSetting("enableTelegramNotifications", checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggleSetting("enableTelegramNotifications", checked)
+                  }
                 />
               </div>
 
-              <Button onClick={handleSaveTelegramSettings}>Save Telegram Settings</Button>
+              {/* <a
+                href={`https://t.me/DayTask_bot?start`}
+                target="_blank"
+                rel="noopener noreferrer"
+              > */}
+              <div ref={telegramRef} id="telegram-button" className=""></div>
+              {/* <Button type="button" className="w-full">
+                  Link Telegram Account
+                </Button> */}
+              {/* </a> */}
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
               <CardTitle>Browser Notifications</CardTitle>
-              <CardDescription>Configure browser notifications for task reminders</CardDescription>
+              <CardDescription>
+                Configure browser notifications for task reminders
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Enable browser notifications</Label>
-                  <p className="text-sm text-muted-foreground">Show browser notifications for task reminders</p>
+                  <p className="text-sm text-muted-foreground">
+                    Show browser notifications for task reminders
+                  </p>
                 </div>
                 <Switch
                   checked={settings.enableBrowserNotifications}
-                  onCheckedChange={(checked) => handleToggleSetting("enableBrowserNotifications", checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggleSetting("enableBrowserNotifications", checked)
+                  }
                 />
               </div>
             </CardContent>
@@ -162,11 +230,15 @@ export function Settings() {
               <div className="flex items-center justify-between w-full">
                 <div className="space-y-0.5">
                   <Label>Enable offline mode</Label>
-                  <p className="text-sm text-muted-foreground">Store tasks locally for offline access</p>
+                  <p className="text-sm text-muted-foreground">
+                    Store tasks locally for offline access
+                  </p>
                 </div>
                 <Switch
                   checked={settings.enableOfflineMode}
-                  onCheckedChange={(checked) => handleToggleSetting("enableOfflineMode", checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggleSetting("enableOfflineMode", checked)
+                  }
                 />
               </div>
 
@@ -178,5 +250,5 @@ export function Settings() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

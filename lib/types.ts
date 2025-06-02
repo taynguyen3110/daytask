@@ -75,3 +75,12 @@ export interface SyncNote {
 }
 
 export type UserMode = 'online-user' | 'offline-user' | "guest";
+
+export interface UserTelegram {
+  id: string;
+  auth_date: number;
+  first_name: string;
+  last_name: string;
+  username: boolean;
+  hash: string;
+}
