@@ -24,7 +24,7 @@ declare global {
 
 export function Settings() {
   const { toast } = useToast();
-  const { settings, updateSettings, linkTelegram } = useSettingsStore();
+  const { settings, updateSettings, linkTelegram, unlinkTelegram } = useSettingsStore();
   const [telegramToken, setTelegramToken] = useState(
     settings.telegramToken || ""
   );
@@ -81,6 +81,10 @@ export function Settings() {
       description: `${key} has been ${value ? "enabled" : "disabled"}.`,
     });
   };
+
+  const handleUnlinkTelegram = () => {
+    unlinkTelegram();
+  }
 
   return (
     <div className="space-y-6">
@@ -180,17 +184,10 @@ export function Settings() {
                   }
                 />
               </div>
-
-              {/* <a
-                href={`https://t.me/DayTask_bot?start`}
-                target="_blank"
-                rel="noopener noreferrer"
-              > */}
               <div ref={telegramRef} id="telegram-button" className=""></div>
-              {/* <Button type="button" className="w-full">
-                  Link Telegram Account
-                </Button> */}
-              {/* </a> */}
+              <Button type="button" className="" onClick={handleUnlinkTelegram}>
+                  Unlink Telegram Account
+                </Button>
             </CardContent>
           </Card>
 

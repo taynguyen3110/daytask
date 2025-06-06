@@ -4,6 +4,7 @@ import { create } from "zustand";
 import type { AuthState, Settings, UserTelegram } from "@/lib/types";
 import { getLocalStorageItem, setLocalStorageItem } from "@/lib/utils";
 import api from "@/lib/api";
+import { toast } from "@/components/ui/use-toast";
 
 interface SettingsStore {
   settings: Settings;
@@ -39,23 +40,36 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
         null
       );
       if (!auth || !auth.user) {
-        console.error("You must login before link to your telegram account.");
+        toast({
+          title: "Login required",
+          description: "You must login before linking your Telegram account.",
+          variant: "destructive",
+        });
         return;
       }
       if (!user) {
-        console.error("No telegram user provided for linking Telegram.");
+        toast({
+          title: "No Telegram user",
+          description: "No Telegram user provided for linking.",
+          variant: "destructive",
+        });
         return;
       }
       const userId = auth.user.id;
-      await api.linkTelegramToUser(userId, user.id);
+      await api.linkTelegramToUser(userId, user.id.toString());
       set((state) => {
-        api.initiate(state.telegramUser!.id);
+        api.initiate(user.id);
         return {
           settings: { ...state.settings, enableTelegramNotifications: true },
           telegramUser: user,
         };
       });
     } catch (error) {
+      toast({
+        title: "Failed to link Telegram",
+        description: "Failed to link Telegram user.",
+        variant: "destructive",
+      });
       console.error("Failed to link Telegram user:", error);
     }
   },
@@ -66,6 +80,11 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
         null
       );
       if (!auth || !auth.user) {
+        toast({
+        title: "Failed to link Telegram",
+        description: "You must login to unlink your telegram account.",
+        variant: "destructive",
+      });
         console.error("You must login to unlink your telegram account.");
         return;
       }
@@ -76,6 +95,11 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
         telegramUser: null,
       }));
     } catch (error) {
+      toast({
+        title: "Failed to link Telegram",
+        description: "An error occurred while linking your Telegram account.",
+        variant: "destructive",
+      });
       console.error("Failed to unlink Telegram user:", error);
     }
   },
