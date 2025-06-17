@@ -2,17 +2,17 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
-  completed: boolean;
+  completed: boolean| null;
   dueDate?: string;
   priority?: string;
-  labels?: string[];
+  labels?: string[] | null;
   createdAt: string;
   updatedAt: string;
-  completedAt?: string;
-  recurrence?: string;
-  reminder?: string;
-  snoozedUntil?: string;
-  userId: string | "";
+  completedAt: string  | null;
+  recurrence: string | null;
+  reminder: string | null;
+  snoozedUntil: string  | null;
+  userId: string | null;
 }
 
 export interface Note {
