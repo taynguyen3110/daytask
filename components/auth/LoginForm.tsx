@@ -10,6 +10,7 @@ import { Button as ThemeBtn } from "@/components/ui/button";
 import Alert from "@/components/ui/AlertAuth";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { useTheme } from "next-themes";
+import MotionDiv from "../ui/MotionDiv";
 
 interface LoginFormData {
   email: string;
@@ -105,9 +106,11 @@ const LoginForm: React.FC = () => {
             })}
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-              {errors.email.message}
-            </p>
+            <MotionDiv>
+              <p className="absolute mt-1 text-xs text-red-600 dark:text-red-400">
+                {errors.email.message}
+              </p>
+            </MotionDiv>
           )}
         </div>
 
@@ -132,9 +135,11 @@ const LoginForm: React.FC = () => {
             })}
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-              {errors.password.message}
-            </p>
+            <MotionDiv>
+              <p className="absolute text-xs text-red-600 dark:text-red-400">
+                {errors.password.message}
+              </p>
+            </MotionDiv>
           )}
         </div>
 

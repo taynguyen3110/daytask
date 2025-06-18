@@ -1,4 +1,6 @@
+import { toast } from "@/components/ui/use-toast";
 import api from "./axios";
+import { ApiResponse } from "../types";
 
 export const telegramService = {
   async initiate(userId: string): Promise<void> {
@@ -22,12 +24,18 @@ export const telegramService = {
     });
   },
 
-  async linkTelegramToUser (userId: string, chatId: string): Promise<void> {
-    const response = await api.post(`/telegram`, { userId, chatId });
+  async linkTelegramToUser(userId: string, chatId: string): Promise<boolean> {
+    const response = await api.post(`/telegram`, {
+      userId,
+      chatId,
+    });
+    return response.data.success;
   },
 
-  async unlinkTelegramFromUser(userId: string): Promise<void> {
-    const response = await api.delete(`/telegram/${userId}`);
+  async unlinkTelegramFromUser(userId: string): Promise<boolean> {
+    const response = await api.delete(
+      `/telegram/${userId}`
+    );
+    return response.data.success;
   },
-
 };

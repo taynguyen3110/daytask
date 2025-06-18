@@ -15,6 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { useSettingsStore } from "@/lib/stores/settings-store";
+import { UserTelegram } from "@/lib/types";
 
 declare global {
   interface Window {
@@ -24,20 +25,27 @@ declare global {
 
 export function Settings() {
   const { toast } = useToast();
-  const { settings, updateSettings, linkTelegram, unlinkTelegram } = useSettingsStore();
+  const {
+    settings,
+    updateSettings,
+    linkTelegram,
+    unlinkTelegram,
+    telegramUser,
+  } = useSettingsStore();
   const [telegramToken, setTelegramToken] = useState(
     settings.telegramToken || ""
   );
   const [telegramChatId, setTelegramChatId] = useState(
     settings.telegramChatId || ""
   );
+  const [telegramUserState, setTelegramUserState] =
+    useState<UserTelegram | null>(null);
   const telegramRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!telegramRef.current) return;
 
     window.onTelegramAuth = async function (user) {
-      console.log("Telegram user:", user);
       linkTelegram(user);
     };
 
@@ -46,7 +54,7 @@ export function Settings() {
 
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
-    script.setAttribute("data-telegram-login", "DayTask_bot");
+    script.setAttribute("data-telegram-login", "DayTaskDev_bot");
     script.setAttribute("data-size", "large");
     script.setAttribute("data-onauth", "onTelegramAuth(user)");
     script.setAttribute("data-request-access", "write");
@@ -56,6 +64,10 @@ export function Settings() {
 
     telegramRef.current.appendChild(script);
   }, []);
+
+  useEffect(() => {
+    setTelegramUserState(telegramUser);
+  }, [telegramUser]);
 
   const handleSaveTelegramSettings = () => {
     updateSettings({
@@ -84,7 +96,7 @@ export function Settings() {
 
   const handleUnlinkTelegram = () => {
     unlinkTelegram();
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -184,10 +196,17 @@ export function Settings() {
                   }
                 />
               </div>
-              <div ref={telegramRef} id="telegram-button" className=""></div>
-              <Button type="button" className="" onClick={handleUnlinkTelegram}>
+              {telegramUserState == null ? (
+                <div ref={telegramRef} id="telegram-button" className=""></div>
+              ) : (
+                <Button
+                  type="button"
+                  className=""
+                  onClick={handleUnlinkTelegram}
+                >
                   Unlink Telegram Account
                 </Button>
+              )}
             </CardContent>
           </Card>
 

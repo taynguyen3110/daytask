@@ -11,6 +11,8 @@ import { Button as ThemeBtn } from "@/components/ui/button";
 import Alert from "../ui/AlertAuth";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { useTheme } from "next-themes";
+import { motion, AnimatePresence } from "framer-motion";
+import MotionDiv from "../ui/MotionDiv";
 
 interface RegisterFormData {
   username: string;
@@ -101,9 +103,11 @@ const RegisterForm: React.FC = () => {
             })}
           />
           {errors.username && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-              {errors.username.message}
-            </p>
+            <MotionDiv>
+              <p className="mt-1 text-xs absolute text-red-600 dark:text-red-400">
+                {errors.username.message}
+              </p>
+            </MotionDiv>
           )}
         </div>
 
@@ -128,9 +132,11 @@ const RegisterForm: React.FC = () => {
             })}
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-              {errors.email.message}
-            </p>
+            <MotionDiv>
+              <p className="mt-1 text-xs absolute text-red-600 dark:text-red-400">
+                {errors.email.message}
+              </p>
+            </MotionDiv>
           )}
         </div>
 
@@ -169,9 +175,11 @@ const RegisterForm: React.FC = () => {
             })}
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-              {errors.password.message}
-            </p>
+            <MotionDiv>
+              <p className="mt-1 text-xs absolute text-red-600 dark:text-red-400">
+                {errors.password.message}
+              </p>
+            </MotionDiv>
           )}
         </div>
 
@@ -190,9 +198,11 @@ const RegisterForm: React.FC = () => {
             })}
           />
           {errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-              {errors.confirmPassword.message}
-            </p>
+            <MotionDiv>
+              <p className="mt-1 text-xs absolute text-red-600 dark:text-red-400">
+                {errors.confirmPassword.message}
+              </p>
+            </MotionDiv>
           )}
         </div>
 

@@ -10,6 +10,7 @@ import { SyncStatus } from "@/components/sync-status";
 import { useTaskStore } from "@/lib/stores/task-store";
 import { useNetworkStatus } from "@/lib/hooks/use-network-status";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import MotionDiv from "../ui/MotionDiv";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

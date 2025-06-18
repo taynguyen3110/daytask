@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="view-transition">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

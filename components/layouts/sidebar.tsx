@@ -140,6 +140,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
+              data-view-transition="default"
             >
               <route.icon className="mr-3 h-5 w-5" />
               {route.name}

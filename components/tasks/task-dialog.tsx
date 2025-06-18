@@ -35,6 +35,7 @@ import { cn } from "@/lib/utils";
 import { format, startOfToday, isSameDay, isBefore, isAfter } from "date-fns";
 import { useMode } from "@/lib/hooks/use-mode";
 import { motion, AnimatePresence } from "framer-motion";
+import MotionDiv from "../ui/MotionDiv";
 
 interface TaskDialogProps {
   open: boolean;
@@ -273,16 +274,11 @@ export function TaskDialog({
               }`}
             />
             {errors.title && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.1, ease: "easeInOut" }}
-              >
+              <MotionDiv>
                 <p className="absolute -bottom-2 text-xs text-destructive">
                   {errors.title}
                 </p>
-              </motion.div>
+              </MotionDiv>
             )}
           </div>
 
@@ -359,16 +355,11 @@ export function TaskDialog({
               </div>
               <div className="relative">
                 {errors.dueTime && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.1, ease: "easeInOut" }}
-                  >
+                  <MotionDiv>
                     <p className="absolute -bottom-2 text-xs text-destructive">
                       {errors.dueTime}
                     </p>
-                  </motion.div>
+                  </MotionDiv>
                 )}
               </div>
             </div>
@@ -388,89 +379,76 @@ export function TaskDialog({
                 </div>
               </div>
               {reminderEnabled && (
-                <AnimatePresence>
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.1, ease: "easeInOut" }}
-                    className="grid gap-2"
-                  >
-                    {/* Date */}
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "justify-start text-left font-normal",
-                            !reminder && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4 relative bottom-[1px]" />
-                          {reminder ? format(reminder, "PPP") : "Pick a date"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={reminder ? reminder : undefined}
-                          onSelect={(date) => {
-                            if (date) {
-                              const timeString = format(
-                                reminder || new Date(),
-                                "HH:mm"
-                              );
-                              setReminder(combineDateAndTime(date, timeString));
-                            }
-                          }}
-                          initialFocus
-                          disabled={{
-                            before: startOfToday(),
-                            after: dueDate ?? undefined,
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {/* Time */}
-                    <div
-                      tabIndex={-1}
-                      className={`border flex items-center px-4 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors duration-100 ${
-                        errors.remindTime ? "border-destructive" : ""
-                      }`}
-                    >
-                      <Clock4Icon
-                        className="h-4 w-4 mr-[4px] relative bottom-[0.5px] cursor-pointer"
-                        onClick={() =>
-                          reminderTimeInputRef.current?.showPicker?.() ||
-                          reminderTimeInputRef.current?.focus()
-                        }
-                      />
-                      <Input
-                        type="time"
-                        ref={reminderTimeInputRef}
-                        className="w-[85px] border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
-                        value={reminder ? format(reminder, "HH:mm") : "00:00"}
-                        onChange={(e) => {
-                          handleRemindTimeChange(e);
+                <MotionDiv className="grid gap-2">
+                  {/* Date */}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "justify-start text-left font-normal",
+                          !reminder && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 relative bottom-[1px]" />
+                        {reminder ? format(reminder, "PPP") : "Pick a date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={reminder ? reminder : undefined}
+                        onSelect={(date) => {
+                          if (date) {
+                            const timeString = format(
+                              reminder || new Date(),
+                              "HH:mm"
+                            );
+                            setReminder(combineDateAndTime(date, timeString));
+                          }
+                        }}
+                        initialFocus
+                        disabled={{
+                          before: startOfToday(),
+                          after: dueDate ?? undefined,
                         }}
                       />
-                    </div>
-                    <div className="relative">
-                      {errors.remindTime && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.1, ease: "easeInOut" }}
-                        >
-                          <p className="absolute -bottom-2 text-xs text-destructive">
-                            {errors.remindTime}
-                          </p>
-                        </motion.div>
-                      )}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
+                    </PopoverContent>
+                  </Popover>
+                  {/* Time */}
+                  <div
+                    tabIndex={-1}
+                    className={`border flex items-center px-4 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors duration-100 ${
+                      errors.remindTime ? "border-destructive" : ""
+                    }`}
+                  >
+                    <Clock4Icon
+                      className="h-4 w-4 mr-[4px] relative bottom-[0.5px] cursor-pointer"
+                      onClick={() =>
+                        reminderTimeInputRef.current?.showPicker?.() ||
+                        reminderTimeInputRef.current?.focus()
+                      }
+                    />
+                    <Input
+                      type="time"
+                      ref={reminderTimeInputRef}
+                      className="w-[85px] border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
+                      value={reminder ? format(reminder, "HH:mm") : "00:00"}
+                      onChange={(e) => {
+                        handleRemindTimeChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="relative">
+                    {errors.remindTime && (
+                      <MotionDiv>
+                        <p className="absolute -bottom-2 text-xs text-destructive">
+                          {errors.remindTime}
+                        </p>
+                      </MotionDiv>
+                    )}
+                  </div>
+                </MotionDiv>
               )}
             </div>
           </div>
