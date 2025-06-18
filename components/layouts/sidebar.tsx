@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import {
   LayoutDashboard,
   CheckSquare,
@@ -15,6 +14,7 @@ import {
   LogIn,
   LogOut,
 } from "lucide-react";
+import { Leckerli_One } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
@@ -22,11 +22,17 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { toast } from "../ui/use-toast";
 import { useTaskStore } from "@/lib/stores/task-store";
+import Clock from "react-clock";
 
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
+
+const leckerli = Leckerli_One({
+  subsets: ["latin"],
+  weight: "400",
+});
 
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const pathname = usePathname();
@@ -103,25 +109,11 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         )}
       >
         <div className="flex items-center justify-between">
-          <div className="mt-3 ml-3">
-            {mounted &&
-              (theme === "dark" ? (
-                <Image
-                  src="/logoDark.png"
-                  height={28}
-                  width={107}
-                  alt="DayTask Logo"
-                />
-              ) : (
-                <Image
-                  src="/logoLight.png"
-                  height={28}
-                  width={107}
-                  alt="DayTask Logo"
-                />
-              ))}
-          </div>
-          {/* <h1 className="text-xl font-bold text-primary">DayTask</h1> */}
+          <h1
+            className={`mt-2 ml-3 text-2xl font-bold text-primary ${leckerli.className}`}
+          >
+            DayTask
+          </h1>
           <Button
             variant="ghost"
             size="icon"
@@ -130,6 +122,11 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           >
             <X className="h-5 w-5" />
           </Button>
+          {/* {mounted && (
+            <div className="relative z-50 w-[150px] h-[150px] bg-white">
+              <Clock />
+            </div>
+          )} */}
         </div>
 
         <nav className="mt-8 space-y-1">

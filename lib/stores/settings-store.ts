@@ -1,12 +1,17 @@
-"use client"
+"use client";
 
-import { create } from "zustand"
-import type { Settings } from "@/lib/types"
-import { getLocalStorageItem, setLocalStorageItem } from "@/lib/utils"
+import { create } from "zustand";
+import type { AuthState, Settings, UserTelegram } from "@/lib/types";
+import { getLocalStorageItem, setLocalStorageItem } from "@/lib/utils";
+import api from "@/lib/api";
+import { toast } from "@/components/ui/use-toast";
 
 interface SettingsStore {
-  settings: Settings
-  updateSettings: (settings: Settings) => void
+  settings: Settings;
+  telegramUser: UserTelegram | null;
+  updateSettings: (settings: Settings) => void;
+  linkTelegram: (user: UserTelegram | null) => void;
+  unlinkTelegram: () => void;
 }
 
 const defaultSettings: Settings = {
@@ -16,14 +21,86 @@ const defaultSettings: Settings = {
   enableTelegramNotifications: false,
   autoSuggestDueDates: true,
   showConfetti: true,
-}
+};
 
 export const useSettingsStore = create<SettingsStore>((set) => ({
   settings:
-    typeof window !== "undefined" ? getLocalStorageItem<Settings>("settings", defaultSettings) : defaultSettings,
-
+    typeof window !== "undefined"
+      ? getLocalStorageItem<Settings>("settings", defaultSettings)
+      : defaultSettings,
+  telegramUser: null,
   updateSettings: (settings: Settings) => {
-    set({ settings })
-    setLocalStorageItem("settings", settings)
+    set({ settings });
+    setLocalStorageItem("settings", settings);
   },
-}))
+  linkTelegram: async (user: UserTelegram | null) => {
+    try {
+      const auth: AuthState | null = getLocalStorageItem<AuthState | null>(
+        "auth",
+        null
+      );
+      if (!auth || !auth.user) {
+        toast({
+          title: "Login required",
+          description: "You must login before linking your Telegram account.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!user) {
+        toast({
+          title: "No Telegram user",
+          description: "No Telegram user provided for linking.",
+          variant: "destructive",
+        });
+        return;
+      }
+      const userId = auth.user.id;
+      await api.linkTelegramToUser(userId, user.id.toString());
+      set((state) => {
+        api.initiate(user.id);
+        return {
+          settings: { ...state.settings, enableTelegramNotifications: true },
+          telegramUser: user,
+        };
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to link Telegram",
+        description: "Failed to link Telegram user.",
+        variant: "destructive",
+      });
+      console.error("Failed to link Telegram user:", error);
+    }
+  },
+  unlinkTelegram: async () => {
+    try {
+      const auth: AuthState | null = getLocalStorageItem<AuthState | null>(
+        "auth",
+        null
+      );
+      if (!auth || !auth.user) {
+        toast({
+        title: "Failed to link Telegram",
+        description: "You must login to unlink your telegram account.",
+        variant: "destructive",
+      });
+        console.error("You must login to unlink your telegram account.");
+        return;
+      }
+      const userId = auth.user.id;
+      await api.unlinkTelegramFromUser(userId);
+      set((state) => ({
+        settings: { ...state.settings, enableTelegramNotifications: false },
+        telegramUser: null,
+      }));
+    } catch (error) {
+      toast({
+        title: "Failed to link Telegram",
+        description: "An error occurred while linking your Telegram account.",
+        variant: "destructive",
+      });
+      console.error("Failed to unlink Telegram user:", error);
+    }
+  },
+}));

@@ -49,9 +49,10 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       labels: task.labels,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      recurrence: task.recurrence,
-      reminder: task.reminder,
-      snoozedUntil: task.snoozedUntil,
+      completedAt: null,
+      recurrence: task.recurrence ?? null,
+      reminder: task.reminder ?? null,
+      snoozedUntil: task.snoozedUntil ?? null,
       userId: currentUser?.id || "",
     };
     try {
@@ -181,8 +182,6 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       // Get all tasks from server
       const serverTasks = await api.fetchServerTasks();
       const localTasks = await taskDB.getAllTasks();
-      console.log("Server Tasks:", serverTasks);
-      console.log("Local Tasks:", localTasks);
 
       for (const task of serverTasks) {
         mergedMap.set(task.id, task);

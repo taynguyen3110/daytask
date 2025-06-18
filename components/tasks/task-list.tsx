@@ -28,7 +28,7 @@ export function TaskList() {
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState("all")
+  const [activeTab, setActiveTab] = useState("today")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
   const [sortBy, setSortBy] = useState<"dueDate" | "priority" | "title">("dueDate")
   const [filterPriority, setFilterPriority] = useState<string | null>(null)
@@ -302,13 +302,13 @@ export function TaskList() {
         </div>
       )}
 
-      <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+      <Tabs defaultValue="today" value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
-          <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="today">Today</TabsTrigger>
           <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
           <TabsTrigger value="overdue">Overdue</TabsTrigger>
           <TabsTrigger value="completed">Completed</TabsTrigger>
+          <TabsTrigger value="all">All</TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="mt-4 space-y-6">

@@ -92,3 +92,211 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Global Transitions and Animations */
+@layer base {
+  /* Apply smooth transitions to all interactive elements */
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  [role="button"],
+  [type="button"],
+  [type="submit"],
+  [type="reset"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Apply hover effects to interactive elements */
+  button:hover,
+  a:hover,
+  [role="button"]:hover,
+  [type="button"]:hover,
+  [type="submit"]:hover,
+  [type="reset"]:hover {
+    @apply transform scale-[1.02];
+  }
+
+  /* Apply focus effects */
+  button:focus,
+  a:focus,
+  input:focus,
+  select:focus,
+  textarea:focus,
+  [role="button"]:focus,
+  [type="button"]:focus,
+  [type="submit"]:focus,
+  [type="reset"]:focus {
+    @apply outline-none ring-2 ring-ring ring-offset-2;
+  }
+
+  /* Apply smooth transitions to all elements that change state */
+  [class*="hover"],
+  [class*="focus"],
+  [class*="active"],
+  [class*="disabled"],
+  [class*="checked"],
+  [class*="selected"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Apply fade animation to elements that appear/disappear */
+  [data-state="open"],
+  [data-state="closed"],
+  [data-state="visible"],
+  [data-state="hidden"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Apply smooth transitions to all transform changes */
+  [style*="transform"],
+  [class*="transform"] {
+    @apply transition-transform duration-200 ease-in-out;
+  }
+
+  /* Apply smooth transitions to all opacity changes */
+  [style*="opacity"],
+  [class*="opacity"] {
+    @apply transition-opacity duration-200 ease-in-out;
+  }
+
+  /* Apply smooth transitions to all color changes */
+  [style*="color"],
+  [style*="background"],
+  [style*="border-color"] {
+    @apply transition-colors duration-200 ease-in-out;
+  }
+
+  /* Apply smooth transitions to all size changes */
+  [style*="width"],
+  [style*="height"],
+  [style*="max-width"],
+  [style*="max-height"],
+  [style*="min-width"],
+  [style*="min-height"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Apply smooth transitions to all position changes */
+  [style*="top"],
+  [style*="right"],
+  [style*="bottom"],
+  [style*="left"],
+  [style*="margin"],
+  [style*="padding"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+}
+
+/* Conditional Rendering and State Transitions */
+@layer base {
+  /* Base styles for elements that will be conditionally rendered */
+  [data-enter],
+  [data-leave],
+  [data-show],
+  [data-hide] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Enter/Show animations */
+  [data-enter="true"],
+  [data-show="true"] {
+    @apply opacity-100 transform translate-y-0 scale-100;
+  }
+
+  /* Leave/Hide animations */
+  [data-enter="false"],
+  [data-leave="true"],
+  [data-show="false"],
+  [data-hide="true"] {
+    @apply opacity-0 transform translate-y-2 scale-95;
+  }
+
+  /* Error message transitions */
+  [data-error="true"] {
+    @apply opacity-100 transform translate-y-0;
+  }
+
+  [data-error="false"] {
+    @apply opacity-0 transform translate-y-2;
+  }
+
+  /* Loading state transitions */
+  [data-loading="true"] {
+    @apply opacity-100;
+  }
+
+  [data-loading="false"] {
+    @apply opacity-0;
+  }
+
+  /* Modal/Dialog transitions */
+  [data-modal="true"],
+  [data-dialog="true"] {
+    @apply opacity-100 transform scale-100;
+  }
+
+  [data-modal="false"],
+  [data-dialog="false"] {
+    @apply opacity-0 transform scale-95;
+  }
+
+  /* Dropdown/Menu transitions */
+  [data-dropdown="true"],
+  [data-menu="true"] {
+    @apply opacity-100 transform translate-y-0;
+  }
+
+  [data-dropdown="false"],
+  [data-menu="false"] {
+    @apply opacity-0 transform -translate-y-2;
+  }
+
+  /* Toast/Notification transitions */
+  [data-toast="true"],
+  [data-notification="true"] {
+    @apply opacity-100 transform translate-x-0;
+  }
+
+  [data-toast="false"],
+  [data-notification="false"] {
+    @apply opacity-0 transform translate-x-full;
+  }
+}
+
+/* Error Message Animation */
+.error-message {
+  @apply fade-in;
+}
+
+.error-message.show {
+  @apply opacity-100;
+}
+
+/* Hide default clock icon in time input */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  /* opacity: 0 !important; */
+  display: none !important;
+  /* background: none !important; */
+  /* -webkit-appearance: none; */
+}
+/* input[type="time"]::-webkit-inner-spin-button {
+  display: none !important;
+}
+input[type="time"]::-webkit-clear-button {
+  display: none !important;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: transparent !important;
+  bottom: 0 !important;
+  color: transparent !important;
+  cursor: pointer !important;
+  height: auto !important;
+  left: 0 !important;
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: auto !important;
+} */

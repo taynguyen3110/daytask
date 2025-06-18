@@ -2,17 +2,17 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
-  completed: boolean;
+  completed: boolean | null;
   dueDate?: string;
   priority?: string;
-  labels?: string[];
+  labels?: string[] | null;
   createdAt: string;
   updatedAt: string;
-  completedAt?: string;
-  recurrence?: string;
-  reminder?: string;
-  snoozedUntil?: string;
-  userId: string | "";
+  completedAt: string | null;
+  recurrence: string | null;
+  reminder: string | null;
+  snoozedUntil: string | null;
+  userId: string | null;
 }
 
 export interface Note {
@@ -63,15 +63,24 @@ export interface ApiResponse<T> {
 }
 
 export interface SyncTask {
-  action: 'add' | 'update' | 'delete',
-  task: Task | string,
-  timestamp: number,
+  action: "add" | "update" | "delete";
+  task: Task | string;
+  timestamp: number;
 }
 
 export interface SyncNote {
-  action: 'add' | 'update' | 'delete',
-  note: Note,
-  timestamp: number,
+  action: "add" | "update" | "delete";
+  note: Note;
+  timestamp: number;
 }
 
-export type UserMode = 'online-user' | 'offline-user' | "guest";
+export type UserMode = "online-user" | "offline-user" | "guest";
+
+export interface UserTelegram {
+  id: string;
+  auth_date: number;
+  first_name: string;
+  last_name: string;
+  username: boolean;
+  hash: string;
+}
