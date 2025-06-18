@@ -49,9 +49,10 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       labels: task.labels,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      recurrence: task.recurrence,
-      reminder: task.reminder,
-      snoozedUntil: task.snoozedUntil,
+      completedAt: null,
+      recurrence: task.recurrence ?? null,
+      reminder: task.reminder ?? null,
+      snoozedUntil: task.snoozedUntil ?? null,
       userId: currentUser?.id || "",
     };
     try {

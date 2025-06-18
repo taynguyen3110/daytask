@@ -73,7 +73,7 @@ export function TaskItem({ task }: TaskItemProps) {
       {
         ...task,
         completed: !task.completed,
-        completedAt: !task.completed ? new Date().toISOString() : undefined,
+        completedAt: !task.completed ? new Date().toISOString() : null,
       },
       userMode
     );
@@ -157,7 +157,7 @@ export function TaskItem({ task }: TaskItemProps) {
         )}
       >
         <Checkbox
-          checked={task.completed}
+          checked={task.completed ?? undefined}
           onCheckedChange={handleToggleComplete}
           className="mt-0.5"
         />
