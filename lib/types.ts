@@ -8,7 +8,7 @@ export interface Task {
   labels?: string[] | null;
   createdAt: string;
   updatedAt: string;
-  completedAt: string | null;
+  completedAt?: string | null;
   recurrence: string | null;
   reminder: string | null;
   snoozedUntil: string | null;

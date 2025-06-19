@@ -87,11 +87,11 @@ export function TaskHeatmap() {
   // Function to determine the intensity level based on the count
   const getIntensityLevel = (count: number) => {
     if (count === 0) return 0;
-    if (count === 1) return 1;
-    if (count === 2) return 2;
-    if (count === 3) return 3;
-    if (count === 4) return 4;
-    return 5;
+    if ([1, 2].includes(count)) return 1;
+    if ([3, 4].includes(count)) return 2;
+    if ([5, 6].includes(count)) return 3;
+    if ([7, 8].includes(count)) return 4;
+    return 5; // 6 or more tasks
   };
 
   // Function to format date for tooltip

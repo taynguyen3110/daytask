@@ -136,7 +136,7 @@ const LoginForm: React.FC = () => {
           />
           {errors.password && (
             <MotionDiv>
-              <p className="absolute text-xs text-red-600 dark:text-red-400">
+              <p className="absolute mt-1 text-xs text-red-600 dark:text-red-400">
                 {errors.password.message}
               </p>
             </MotionDiv>

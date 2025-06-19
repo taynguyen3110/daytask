@@ -205,7 +205,10 @@ export function TaskItem({ task }: TaskItemProps) {
             <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setIsSnoozeDialogOpen(true)}>
+            <DropdownMenuItem
+              onClick={() => setIsSnoozeDialogOpen(true)}
+              disabled={!!task.completed}
+            >
               Snooze
             </DropdownMenuItem>
             <DropdownMenuSeparator />

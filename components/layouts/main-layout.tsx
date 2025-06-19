@@ -17,13 +17,16 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
   const { isOnline } = useNetworkStatus();
-  const { syncNotes, mergeNotes } = useNoteStore();
+  const { syncNotes, mergeNotes, fetchNotes } = useNoteStore();
   const { syncTasks, mergeTasks, fetchTasks } = useTaskStore();
   const { syncData, mergeData, setSyncData, setMergeData } = useAuthStore();
 
   useEffect(() => {
     useAuthStore.getState().initialize();
-    fetchTasks();
+    (async () => {
+      await fetchTasks();
+      await fetchNotes();
+    })();
   }, []);
 
   // Close sidebar when route changes on mobile
