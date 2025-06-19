@@ -4,17 +4,24 @@ import { GitMerge, RefreshCcw, Wifi, WifiOff } from "lucide-react";
 import { useTaskStore } from "@/lib/stores/task-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { useEffect } from "react";
+import { useNoteStore } from "@/lib/stores/note-store";
 
 interface SyncStatusProps {
   isOnline: boolean;
 }
 
 export function SyncStatus({ isOnline }: SyncStatusProps) {
-  const { pendingSync } = useTaskStore();
+  const pendingSyncTasks = useTaskStore().pendingSync;
+  const pendingSyncNotes = useNoteStore().pendingSync;
   const { setSyncData, isAuthenticated, syncData, mergeData } = useAuthStore();
-  const hasPendingChanges = pendingSync.length > 0;
+  const hasPendingChanges = (pendingSyncTasks.length + pendingSyncNotes.length) > 0;
 
   useEffect(() => {
+    console.log("isOnline:", isOnline);
+    console.log("isAuthenticated:", isAuthenticated);
+    console.log("hasPendingChanges:", hasPendingChanges);
+    console.log("pendingSyncTasks:", pendingSyncTasks);
+    console.log("pendingSyncNotes:", pendingSyncNotes);
     if (isOnline && isAuthenticated && hasPendingChanges) {
       setSyncData(true);
     }
@@ -28,7 +35,7 @@ export function SyncStatus({ isOnline }: SyncStatusProps) {
             {hasPendingChanges && syncData ? (
               <>
                 <RefreshCcw className="animate-spin text-blue-500" size={16} />
-                <span>Syncing {pendingSync.length} changes...</span>
+                <span>Syncing {pendingSyncTasks.length + pendingSyncNotes.length} changes...</span>
               </>
             ) : mergeData ? (
               <>

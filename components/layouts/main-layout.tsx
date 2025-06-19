@@ -11,11 +11,13 @@ import { useTaskStore } from "@/lib/stores/task-store";
 import { useNetworkStatus } from "@/lib/hooks/use-network-status";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import MotionDiv from "../ui/MotionDiv";
+import { useNoteStore } from "@/lib/stores/note-store";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
   const { isOnline } = useNetworkStatus();
+  const { syncNotes, mergeNotes } = useNoteStore();
   const { syncTasks, mergeTasks, fetchTasks } = useTaskStore();
   const { syncData, mergeData, setSyncData, setMergeData } = useAuthStore();
 
@@ -35,6 +37,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       console.log("Merging tasks...");
       (async () => {
         await mergeTasks();
+        await mergeNotes();
         console.log("Done...");
         setMergeData(false);
       })();
@@ -47,6 +50,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       console.log("Syncing tasks...");
       (async () => {
         await syncTasks();
+        await syncNotes();
         console.log("Done...");
         setSyncData(false);
       })();

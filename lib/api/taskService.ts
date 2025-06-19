@@ -5,6 +5,7 @@ import { taskDB } from "../db";
 
 const URL = "/task";
 export const taskService = {
+  
   async fetchLocalTasks(): Promise<Task[]> {
     return await taskDB.getAllTasks();
   },

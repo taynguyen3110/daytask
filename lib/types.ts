@@ -20,6 +20,7 @@ export interface Note {
   content: string;
   createdAt: string;
   updatedAt: string;
+  userId: string | null;
 }
 
 export interface Notification {
@@ -70,7 +71,7 @@ export interface SyncTask {
 
 export interface SyncNote {
   action: "add" | "update" | "delete";
-  note: Note;
+  note: Note | string;
   timestamp: number;
 }
 

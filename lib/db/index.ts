@@ -37,7 +37,7 @@ export const taskDB = {
       await db.tasks.bulkPut(tasks);
     } catch (error) {
       console.error("Dexie bulkAdd failed:", error, tasks);
-      throw error; // so the calling function still logs it
+      throw error;
     }
   },
 
@@ -83,8 +83,21 @@ export const noteDB = {
     await db.notes.put(note);
   },
 
+  async mergeNotes(notes: Note[]) {
+    try {
+      await db.notes.bulkPut(notes);
+    } catch (error) {
+      console.error("Dexie bulkAdd failed:", error, notes);
+      throw error;
+    }
+  },
+
   async deleteNote(id: string) {
     await db.notes.delete(id);
+  },
+
+  async clearNotes() {
+    await clearTable(db.notes);
   },
 
   async syncAllNotes(newNotes: Note[]) {
@@ -145,4 +158,4 @@ const replaceAllItems = async <T>(table: Table<T>, newItems: T[]) => {
 
 const clearTable = async <T>(table: Table<T>) => {
   await table.clear();
-}
+};

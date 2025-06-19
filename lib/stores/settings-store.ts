@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { persist, PersistOptions } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 import type { AuthState, Settings, UserTelegram } from "@/lib/types";
 import { getLocalStorageItem, setLocalStorageItem } from "@/lib/utils";
 import api from "@/lib/api";

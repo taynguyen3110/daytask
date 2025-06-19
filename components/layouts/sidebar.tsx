@@ -23,6 +23,7 @@ import { useAuthStore } from "@/lib/stores/auth-store";
 import { toast } from "../ui/use-toast";
 import { useTaskStore } from "@/lib/stores/task-store";
 import Clock from "react-clock";
+import { useNoteStore } from "@/lib/stores/note-store";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -41,6 +42,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const [mounted, setMounted] = useState(false);
   const { isAuthenticated, logout } = useAuthStore();
   const { removeLocalTasks } = useTaskStore();
+  const { removeLocalNotes } = useNoteStore();
 
   // Ensure the component is mounted before rendering theme-dependent content
   useEffect(() => {
@@ -78,6 +80,8 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const handleLogout = async () => {
     try {
       await removeLocalTasks(); // Clear local tasks before logout
+      await removeLocalNotes(); // Clear local tasks before logout
+
       await logout();
       toast({
         title: "You are now logged out!",
