@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+  const telegramBotToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
 
   if (!telegramBotToken) {
     return NextResponse.json({ error: 'Telegram bot token not configured' }, { status: 500 });
