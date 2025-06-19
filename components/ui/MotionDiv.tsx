@@ -10,10 +10,10 @@ const MotionDiv = ({ children, className = "" }: MotionDivProps) => {
   return (
     <AnimatePresence>
       <motion.div
-        key={Math.random()} // Unique key to trigger re-animation
-        initial={{ opacity: 0, scale: 0.95 }}
+        // key={Math.random()} 
+        initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
+        exit={{ opacity: 0, scale: 0.97 }}
         transition={{ duration: 0.1, ease: "easeInOut" }}
         className={className}
       >

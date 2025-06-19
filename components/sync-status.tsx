@@ -17,11 +17,6 @@ export function SyncStatus({ isOnline }: SyncStatusProps) {
   const hasPendingChanges = (pendingSyncTasks.length + pendingSyncNotes.length) > 0;
 
   useEffect(() => {
-    console.log("isOnline:", isOnline);
-    console.log("isAuthenticated:", isAuthenticated);
-    console.log("hasPendingChanges:", hasPendingChanges);
-    console.log("pendingSyncTasks:", pendingSyncTasks);
-    console.log("pendingSyncNotes:", pendingSyncNotes);
     if (isOnline && isAuthenticated && hasPendingChanges) {
       setSyncData(true);
     }
