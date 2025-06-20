@@ -20,8 +20,8 @@ export function TaskStats() {
     startOfWeek.setDate(now.getDate() - now.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
 
-    const endOfToday = new Date(now);
-    endOfToday.setHours(23, 59, 59, 999);
+    const currentTime = new Date(now);
+    // currentTime.setHours(23, 59, 59, 999);
 
     const threeDaysFromNow = new Date(now);
     threeDaysFromNow.setDate(now.getDate() + 3);
@@ -39,13 +39,13 @@ export function TaskStats() {
           (task) =>
             !task.completed &&
             task.dueDate &&
-            new Date(task.dueDate) < endOfToday
+            new Date(task.dueDate) < currentTime
         ).length,
         dueSoon: tasks.filter(
           (task) =>
             !task.completed &&
             task.dueDate &&
-            new Date(task.dueDate) > endOfToday &&
+            new Date(task.dueDate) > currentTime &&
             new Date(task.dueDate) <= threeDaysFromNow
         ).length,
       });
