@@ -21,7 +21,6 @@ export function TaskStats() {
     startOfWeek.setHours(0, 0, 0, 0);
 
     const currentTime = new Date(now);
-    // currentTime.setHours(23, 59, 59, 999);
 
     const threeDaysFromNow = new Date(now);
     threeDaysFromNow.setDate(now.getDate() + 3);
@@ -55,6 +54,7 @@ export function TaskStats() {
   const stats_data = [
     {
       title: "Total Tasks",
+      description: "Total number of your tasks",
       value: stats.total,
       icon: CheckCircle,
       color: "text-blue-500",
@@ -62,6 +62,7 @@ export function TaskStats() {
     },
     {
       title: "Completed This Week",
+      description: "Total number of tasks completed this week",
       value: stats.completedThisWeek,
       icon: Clock,
       color: "text-green-500",
@@ -69,6 +70,7 @@ export function TaskStats() {
     },
     {
       title: "Overdue",
+      description: "Total number of tasks that are overdue",
       value: stats.overdue,
       icon: AlertTriangle,
       color: "text-red-500",
@@ -76,6 +78,7 @@ export function TaskStats() {
     },
     {
       title: "Due Soon",
+      description: "Total number of tasks that are due soon (within 3 days)",
       value: stats.dueSoon,
       icon: CalendarClock,
       color: "text-yellow-500",
@@ -89,7 +92,7 @@ export function TaskStats() {
         <Card key={index}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-            <div className={`${stat.bgColor} rounded-full p-2`}>
+            <div className={`${stat.bgColor} rounded-full p-2`} title={stat.description}>
               <stat.icon className={`h-4 w-4 ${stat.color}`} />
             </div>
           </CardHeader>

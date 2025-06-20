@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { AuthState, Settings, UserTelegram } from "@/lib/types";
-import { getLocalStorageItem, setLocalStorageItem } from "@/lib/utils";
+import { getLocalStorageItem } from "@/lib/utils";
 import api from "@/lib/api";
 import { toast } from "@/components/ui/use-toast";
 
@@ -11,6 +11,7 @@ interface SettingsStore {
   settings: Settings;
   telegramUser: UserTelegram | null;
   updateSettings: (settings: Settings) => void;
+  initializeTelegramUser: () => void;
   linkTelegram: (user: UserTelegram | null) => void;
   unlinkTelegram: () => void;
 }
@@ -27,14 +28,23 @@ const defaultSettings: Settings = {
 export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set) => ({
-      settings:
-        // typeof window !== "undefined"
-          // ? getLocalStorageItem<Settings>("settings", defaultSettings)
-           defaultSettings,
+      settings: defaultSettings,
       telegramUser: null,
       updateSettings: (settings: Settings) => {
         set({ settings });
-        // setLocalStorageItem("settings", settings);
+      },
+      initializeTelegramUser: () => {
+        const auth: AuthState | null = getLocalStorageItem<AuthState | null>(
+          "auth",
+          null
+        );
+        if (auth && auth.user && auth.chatId) {
+          set({
+            telegramUser: { id: auth.chatId },
+          });
+        } else {
+          set({ telegramUser: null });
+        }
       },
       linkTelegram: async (user: UserTelegram | null) => {
         try {
@@ -77,7 +87,7 @@ export const useSettingsStore = create<SettingsStore>()(
                   ...state.settings,
                   enableTelegramNotifications: true,
                 },
-                telegramUser: user,
+                telegramUser: { id: user.id },
               };
             });
           }
@@ -134,10 +144,6 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: "settings-store", // localStorage key
-      partialize: (state) => ({
-        telegramUser: state.telegramUser,
-        settings: state.settings,
-      }),
     }
   )
 );

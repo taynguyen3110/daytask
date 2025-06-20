@@ -23,6 +23,7 @@ export interface LoginResponse {
   token: { accessToken: string; refreshToken: string };
   isAuthenticated: boolean;
   message?: string;
+  chatId: string | null;
 }
 
 export const authService = {
@@ -37,6 +38,7 @@ export const authService = {
       isAuthenticated: true,
       token: responseData.token,
       user: responseData.user,
+      chatId: responseData.chatId ?? null, // Assuming chatId is not part of the response
     };
   },
 
@@ -57,7 +59,7 @@ export const authService = {
   checkAuth(): AuthState {
     const auth = localStorage.getItem("auth");
     if (!auth) {
-      return { isAuthenticated: false, token: null, user: null };
+      return { isAuthenticated: false, token: null, user: null, chatId: null};
     }
     try {
       const authState = JSON.parse(auth);
@@ -65,10 +67,11 @@ export const authService = {
         isAuthenticated: true,
         token: authState.token,
         user: authState.user,
+        chatId: authState.chatId ?? null
       };
     } catch (error) {
       localStorage.removeItem("auth");
-      return { isAuthenticated: false, token: null, user: null };
+      return { isAuthenticated: false, token: null, user: null, chatId: null };
     }
   },
 };

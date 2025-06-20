@@ -23,6 +23,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   user: null,
   token: null,
+  chatId: null,
   message: "",
   syncData: false,
   setSyncData: (isSync: boolean) => set({ syncData: isSync }),

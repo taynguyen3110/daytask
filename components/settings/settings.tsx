@@ -36,8 +36,6 @@ export function Settings() {
   } = useSettingsStore();
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
-  const [telegramUserState, setTelegramUserState] =
-    useState<UserTelegram | null>(null);
   const telegramRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -61,11 +59,7 @@ export function Settings() {
     script.async = true;
 
     telegramRef.current.appendChild(script);
-  }, []);
-
-  useEffect(() => {
-    setTelegramUserState(telegramUser);
-  }, [telegramUser]);
+  }, [telegramUser, isAuthenticated]);
 
   const handleSaveTelegramSettings = () => {
     updateSettings({
@@ -158,7 +152,7 @@ export function Settings() {
                   <LogIn className="mr-2 h-4 w-4" />
                   Login to receive Telegram Reminders
                 </Button>
-              ) : telegramUserState == null ? (
+              ) : telegramUser == null ? (
                 <div ref={telegramRef} id="telegram-button" className=""></div>
               ) : (
                 <Button

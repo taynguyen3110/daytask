@@ -53,6 +53,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   token: { accessToken: string; refreshToken: string } | null;
   user: User | null;
+  chatId: string | null;
 }
 
 export interface ApiResponse<T> {
@@ -79,9 +80,4 @@ export type UserMode = "online-user" | "offline-user" | "guest";
 
 export interface UserTelegram {
   id: string;
-  auth_date: number;
-  first_name: string;
-  last_name: string;
-  username: boolean;
-  hash: string;
 }

@@ -85,7 +85,7 @@ export function TaskDialog({
         setRecurrence(null);
 
         setReminder(
-          defaultDate ? new Date(defaultDate) : dateAtTime(new Date(), 15)
+          defaultDate ? new Date(defaultDate) : new Date()
         );
         setLabels([]);
       }
@@ -220,7 +220,6 @@ export function TaskDialog({
   const handleRemindTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = e.target.value; // e.g. "HH:mm"
     const success = processRemindTimeChange(newTime);
-    console.log(newTime);
 
     if (!success) {
       e.target.value = format(reminder!, "HH:mm"); // reset input if error

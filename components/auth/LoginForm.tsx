@@ -11,6 +11,7 @@ import Alert from "@/components/ui/AlertAuth";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { useTheme } from "next-themes";
 import MotionDiv from "../ui/MotionDiv";
+import { useSettingsStore } from "@/lib/stores/settings-store";
 
 interface LoginFormData {
   email: string;
@@ -24,6 +25,7 @@ const LoginForm: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const { login, setMergeData } = useAuthStore();
+  const { initializeTelegramUser } = useSettingsStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -43,9 +45,12 @@ const LoginForm: React.FC = () => {
     try {
       await login(data.email, data.password);
       setMergeData(true);
+      initializeTelegramUser();
       router.push("/");
       setSuccessMessage("Login successful!");
     } catch (err: any) {
+      console.log("Login error:", err);
+      
       setError(err.response?.data?.message);
     } finally {
       setIsLoading(false);
